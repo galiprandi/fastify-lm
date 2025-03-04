@@ -1,0 +1,33 @@
+{
+  "name": "fastify-lm",
+  "version": "1.0.0",
+  "description": "A Fastify plugin for integrating multiple LLMs (Large Language Models)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --dts",
+    "prepublishOnly": "npm run build",
+    "test": "vitest"
+  },
+  "keywords": [
+    "fastify",
+    "llm",
+    "ai",
+    "openai",
+    "gemini",
+    "deepseek"
+  ],
+  "author": "Germán Aliprandi",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "fastify-plugin": "^5.0.1",
+    "tsup": "^7.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^3.0.7"
+  },
+  "dependencies": {
+    "fastify": "^5.2.1",
+    "openai": "^4.86.1"
+  }
+}
