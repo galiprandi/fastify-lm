@@ -6,5 +6,4 @@ declare module "fastify" {
     }
 }
 
-
 export type LmClient = OpenAI | { chat: <T>(msg: T) => Promise<T> };
