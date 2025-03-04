@@ -1,13 +1,14 @@
 {
   "name": "fastify-lm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Fastify plugin for integrating multiple LLMs (Large Language Models)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup src/index.ts --dts",
     "prepublishOnly": "npm run build",
-    "test": "vitest"
+    "test": "vitest",
+    "style": "npx standard --fix src/**/*.ts"
   },
   "keywords": [
     "fastify",
