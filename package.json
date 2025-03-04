@@ -8,7 +8,8 @@
     "build": "tsup src/index.ts --dts",
     "prepublishOnly": "npm run build",
     "test": "vitest",
-    "style": "npx standard --fix src/**/*.ts"
+    "style": "npx standard --fix src/**/*.ts",
+    "publish": "npm publish --access public"
   },
   "keywords": [
     "fastify",
