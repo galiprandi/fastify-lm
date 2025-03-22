@@ -28,8 +28,7 @@
     "fastify-plugin": "^5.0.1",
     "neostandard": "^0.12.1",
     "tsup": "^7.0.0",
-    "typescript": "^5.0.0",
-    "vitest": "^3.0.7"
+    "typescript": "^5.0.0"
   },
   "dependencies": {
     "axios": "^1.8.3",
