@@ -18,7 +18,68 @@ fastify-lm is a [Fastify](https://www.fastify.io/) plugin that integrates multip
 | Claude   | Anthropic's language model         |
 | Deepseek | Deepseek AI models                 |
 
+## Quick start
+
+Start by creating a Fastify instance and registering the plugin.
+
+```bash
+npm i fastify fastify-lm
+```
+
+Create a file `src/server.js` and add following code:
+
+```javascript
+// Import the framework and instantiate it
+import Fastify from 'fastify'
+import LmPlugin from 'fastify-lm'
+
+const fastify = Fastify({
+    logger: true
+})
+
+// Register the lm-plugin
+fastify.register(LmPlugin, {
+    models:[{
+        name: 'lm', // the name of the model instance on your app
+        provider: 'openai', // openai, google, claude, deepseek or any available provider
+        model: 'gpt-4o-mini',
+        apiKey: 'your-api-key'
+    }]
+})
+
+// Declare a route / that returns the models
+fastify.get('/', async function handler(request, reply) {
+    const models = await fastify.lm.models()
+    return { models }
+})
+
+// Run the server!
+try {
+    await fastify.listen({ port: 3000 })
+    await fastify.lm.models()
+} catch (err) {
+    fastify.log.error(err)
+    process.exit(1)
+}
+```
+> Remember to replace `your-api-key` with your actual API key.
+
+Finally, launch the server with:
+
+```bash
+node src/server.js
+```
+
+and test it with:
+
+```bash
+curl http://localhost:3000/
+```
+
 ## Installation
+
+To install the plugin, on existing Fastify project, just run:
+
 ```bash
 npm install fastify-lm
 ```
