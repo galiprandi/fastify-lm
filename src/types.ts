@@ -1,24 +1,29 @@
- interface LMChatMessages {
-  role: "system" | "user" | "assistant";
-  content: string;
-}
+type LMProviders = "openai" | "google" | "deepseek" | "claude";
 
 export interface LMAdapter {
-  chat(params: { system: string; messages: LMChatMessages[] }): Promise<string | null>;
+  chat(params: {
+    system: string;
+    messages: {
+      role: "system" | "user" | "assistant";
+      content: string;
+    }[];
+  }): Promise<string | null>;
   models(): Promise<string[] | null>;
 }
 
-export type AvailableAdapters = Record<LMProviders, new (apiKey: string, model: string) => LMAdapter>;
-
-
-export interface LMConfig {
-  name: string;
-  provider: LMProviders;
-  model: string;
-  apiKey: string;
+export interface LMPluginOptions {
+  models: {
+    name: string;
+    provider: LMProviders;
+    model: string;
+    apiKey: string;
+  }[];
 }
 
-export type LMProviders = "openai" | "google" | "deepseek" | "claude"
+export type AvailableAdapters = Record<
+  LMProviders,
+  new (apiKey: string, model: string) => LMAdapter
+>;
 
 declare module "fastify" {
   interface FastifyInstance {

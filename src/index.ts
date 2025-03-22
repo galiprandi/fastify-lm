@@ -1,7 +1,10 @@
-import { type FastifyInstance } from "fastify";
-import type { AvailableAdapters } from "./types";
-
 import fp from "fastify-plugin";
+
+// Types
+import type { FastifyInstance } from "fastify";
+import type { AvailableAdapters, LMPluginOptions } from "./types";
+
+// Adapters
 import { OpenAIAdapter } from "./adapters/openai";
 import { GoogleGeminiAdapter } from "./adapters/google";
 import { ClaudeAdapter } from "./adapters/claude";
@@ -20,7 +23,7 @@ const availableAdapters: AvailableAdapters = {
 /**
  * Fastify plugin for language models
  */
-async function fastifyLm(fastify: FastifyInstance, options: ProviderOptions) {
+async function fastifyLm(fastify: FastifyInstance, options: LMPluginOptions) {
   if (
     !options.models ||
     !Array.isArray(options.models) ||
@@ -32,7 +35,9 @@ async function fastifyLm(fastify: FastifyInstance, options: ProviderOptions) {
     const { name, provider, model, apiKey } = config;
     if (!name || !provider || !model || !apiKey)
       throw new Error(
-        `Model configuration is missing required fields: ${JSON.stringify(config)}`,
+        `Model configuration is missing required fields: ${JSON.stringify(
+          config
+        )}`
       );
     if (!(provider in availableAdapters))
       throw new Error(`Provider ${provider} is not supported.`);
@@ -46,13 +51,3 @@ export default fp(fastifyLm, {
   fastify: "5.x",
   name: "fastify-lm",
 });
-
-// Interfaces
-interface ProviderOptions {
-  models: Array<{
-    name: string;
-    provider: keyof typeof availableAdapters;
-    model: string;
-    apiKey: string;
-  }>;
-}
