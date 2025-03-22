@@ -1,10 +1,10 @@
 import axios from "axios";
-import { LMAdapter, LMChatParams } from "../types";
+import { LMAdapter, LMChatParams, Adapter } from "../types";
 import { handleRequestError } from "../utils";
 
-export class DeepSeekAdapter implements LMAdapter {
-  private apiKey: string;
-  private model: string;
+export class DeepSeekAdapter implements LMAdapter, Adapter {
+  public apiKey: string;
+  public model: string;
   private baseURL: string = "https://api.deepseek.com";
 
   constructor(apiKey: string, model: string) {

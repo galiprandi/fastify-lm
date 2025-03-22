@@ -5,12 +5,17 @@ import { GoogleGeminiAdapter } from "./adapters/google";
 import { ClaudeAdapter } from "./adapters/claude";
 import { DeepSeekAdapter } from "./adapters/deepseek";
 
-const adapters = {
+interface Adapter {
+  apiKey: string;
+  model: string;
+}
+
+const adapters: Record<string, new (apiKey: string, model: string) => Adapter> = {
   openai: OpenAIAdapter,
   google: GoogleGeminiAdapter,
   claude: ClaudeAdapter,
   deepseek: DeepSeekAdapter,
-} as const;
+};
 
 async function fastifyLm(fastify: FastifyInstance, options: ProviderOptions) {
   if (
@@ -30,7 +35,7 @@ async function fastifyLm(fastify: FastifyInstance, options: ProviderOptions) {
       throw new Error(`Provider ${provider} is not supported.`);
 
     const instance = new adapters[provider](apiKey, model);
-    fastify.decorate(name, instance);
+    fastify.decorate<Adapter>(name, instance);
   }
 }
 

@@ -3,8 +3,8 @@ import { LMAdapter, LMChatParams } from "../types";
 import { handleRequestError } from "../utils";
 
 export class ClaudeAdapter implements LMAdapter {
-  private apiKey: string;
-  private model: string;
+  public apiKey: string;
+  public model: string;
   private baseURL: string = "https://api.anthropic.com/v1";
 
   constructor(apiKey: string, model: string) {
@@ -12,19 +12,15 @@ export class ClaudeAdapter implements LMAdapter {
     this.model = model;
   }
 
-  private getHeaders() {
-    return {
-      "x-api-key": this.apiKey,
-      "anthropic-version": "2023-06-01",
-      "Content-Type": "application/json",
-    };
-  }
-
   async chat(params: LMChatParams): Promise<string | null> {
     try {
       const { system, messages } = params;
       const url = `${this.baseURL}/messages`;
-      const headers = this.getHeaders();
+      const headers = {
+        "x-api-key": this.apiKey,
+        "anthropic-version": "2023-06-01",
+        "Content-Type": "application/json",
+      };
       const body = {
         model: this.model,
         max_tokens: 512,
@@ -41,7 +37,11 @@ export class ClaudeAdapter implements LMAdapter {
   async models(): Promise<string[] | null> {
     try {
       const url = `${this.baseURL}/models`;
-      const headers = this.getHeaders();
+      const headers = {
+        "x-api-key": this.apiKey,
+        "anthropic-version": "2023-06-01",
+        "Content-Type": "application/json",
+      };
       const { data } = await axios.get<ClaudeModelsResponse>(url, {
         headers,
       });
