@@ -1,10 +1,10 @@
-type LMProviders = "openai" | "google" | "deepseek" | "claude";
+type LMProviders = 'openai' | 'google' | 'deepseek' | 'claude'
 
 export interface LMAdapter {
   chat(params: {
     system: string;
     messages: {
-      role: "system" | "user" | "assistant";
+      role: 'system' | 'user' | 'assistant';
       content: string;
     }[];
   }): Promise<string | null>;
@@ -23,9 +23,9 @@ export interface LMPluginOptions {
 export type AvailableAdapters = Record<
   LMProviders,
   new (apiKey: string, model: string) => LMAdapter
->;
+>
 
-declare module "fastify" {
+declare module 'fastify' {
   interface FastifyInstance {
     [key: string]: LMAdapter;
   }

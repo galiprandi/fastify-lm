@@ -8,7 +8,8 @@
     "build": "tsup src/index.ts --dts",
     "prepublishOnly": "npm run build",
     "test": "vitest",
-    "style": "npx prettier --write src/**/*.{ts,tsx,js,jsx,json,md}",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "publish": "npm publish --access public"
   },
   "keywords": [
@@ -23,7 +24,9 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "eslint": "^9.23.0",
     "fastify-plugin": "^5.0.1",
+    "neostandard": "^0.12.1",
     "tsup": "^7.0.0",
     "typescript": "^5.0.0",
     "vitest": "^3.0.7"
