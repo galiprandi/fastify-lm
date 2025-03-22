@@ -1,10 +1,10 @@
 import axios from "axios";
-import { LMAdapter, LMChatParams, Adapter } from "../types";
+import { LMAdapter, LMChatParams } from "../types";
 import { handleRequestError } from "../utils";
 
-export class OpenAIAdapter implements LMAdapter, Adapter {
-  public apiKey: string;
-  public model: string;
+export class OpenAIAdapter implements LMAdapter {
+  private apiKey: string;
+  private model: string;
   private baseURL: string = "https://api.openai.com/v1";
 
   constructor(apiKey: string, model: string) {
@@ -39,7 +39,7 @@ export class OpenAIAdapter implements LMAdapter, Adapter {
         "Content-Type": "application/json",
       };
       const { data } = await axios.get<OpenAIModelsResponse>(url, { headers });
-      const models = data.data?.map(({ id }) => id) ?? [];
+      const models = data.data?.map(({ id }) => id).sort() ?? [];
       return models;
     } catch (error) {
       return handleRequestError("Error in OpenAIAdapter.models:", error);

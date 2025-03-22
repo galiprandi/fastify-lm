@@ -44,7 +44,7 @@ export class DeepSeekAdapter implements LMAdapter, Adapter {
         url,
         { headers },
       );
-      const models = data.data?.map(({ id }) => id) ?? [];
+      const models = data.data?.map(({ id }) => id).sort() ?? [];
       return models;
     } catch (error) {
       return handleRequestError("Error in DeepSeekAdapter.models:", error);

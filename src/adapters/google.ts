@@ -1,10 +1,10 @@
 import axios from "axios";
-import { LMAdapter, LMChatParams, Adapter } from "../types";
+import { LMAdapter, LMChatParams } from "../types";
 import { handleRequestError } from "../utils";
 
-export class GoogleGeminiAdapter implements LMAdapter, Adapter {
-  public apiKey: string;
-  public model: string;
+export class GoogleGeminiAdapter implements LMAdapter {
+  private apiKey: string;
+  private model: string;
   private baseURL: string;
 
   constructor(apiKey: string, model: string) {
@@ -38,7 +38,7 @@ export class GoogleGeminiAdapter implements LMAdapter, Adapter {
     try {
       const url = `${this.baseURL}?key=${this.apiKey}`;
       const { data } = await axios.get<GeminiModelsResponse>(url);
-      const models = data.models?.map((model) => model.name) ?? [];
+      const models = data.models?.map((model) => model.name).sort() ?? [];
       return models;
     } catch (error) {
       return handleRequestError("Error in GoogleGeminiAdapter.models:", error);

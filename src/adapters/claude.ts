@@ -45,7 +45,7 @@ export class ClaudeAdapter implements LMAdapter {
       const { data } = await axios.get<ClaudeModelsResponse>(url, {
         headers,
       });
-      const models = data.data?.map(({ id }) => id) ?? [];
+      const models = data.data?.map(({ id }) => id).sort() ?? [];
       return models;
     } catch (error) {
       return handleRequestError("Error in ClaudeAdapter.models:", error);
