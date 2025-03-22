@@ -6,6 +6,7 @@ export interface Message {
 export interface LMAdapter {
   chat(params: { system: string; messages: Message[] }): Promise<string | null>;
   models(): Promise<string[] | null>;
+  getHeaders?(): Record<string, string>;
 }
 
 export type LMChatParams = Parameters<LMAdapter["chat"]>[0];
@@ -25,6 +26,7 @@ declare module "fastify" {
         messages: Message[];
       }) => Promise<string | null>;
       models: () => Promise<string[] | null>;
+      getHeaders?: () => Record<string, string>;
     };
   }
 }

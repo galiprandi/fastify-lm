@@ -5,12 +5,12 @@ import { GoogleGeminiAdapter } from "./adapters/google";
 import { ClaudeAdapter } from "./adapters/claude";
 import { DeepSeekAdapter } from "./adapters/deepseek";
 
-const adapters: Record<string, any> = {
+const adapters = {
   openai: OpenAIAdapter,
   google: GoogleGeminiAdapter,
   claude: ClaudeAdapter,
   deepseek: DeepSeekAdapter,
-};
+} as const;
 
 async function fastifyLm(fastify: FastifyInstance, options: ProviderOptions) {
   if (
@@ -26,7 +26,7 @@ async function fastifyLm(fastify: FastifyInstance, options: ProviderOptions) {
       throw new Error(
         `Model configuration is missing required fields: ${JSON.stringify(config)}`,
       );
-    if (!adapters[provider])
+    if (!(provider in adapters))
       throw new Error(`Provider ${provider} is not supported.`);
 
     const instance = new adapters[provider](apiKey, model);
@@ -43,7 +43,7 @@ export default fp(fastifyLm, {
 interface ProviderOptions {
   models: Array<{
     name: string;
-    provider: string;
+    provider: keyof typeof adapters;
     model: string;
     apiKey: string;
   }>;

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { LMAdapter, LMChatParams } from "../types";
-import { handleRequestError } from "./errors";
+import { handleRequestError } from "../utils";
 
 export class DeepSeekAdapter implements LMAdapter {
   private apiKey: string;
