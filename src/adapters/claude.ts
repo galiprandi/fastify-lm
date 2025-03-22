@@ -1,5 +1,5 @@
+import type { LMAdapter } from "../types";
 import axios from "axios";
-import { LMAdapter, LMChatParams } from "../types";
 import { handleRequestError } from "../utils";
 
 export class ClaudeAdapter implements LMAdapter {
@@ -12,7 +12,7 @@ export class ClaudeAdapter implements LMAdapter {
     this.model = model;
   }
 
-  async chat(params: LMChatParams): Promise<string | null> {
+  chat:LMAdapter["chat"] = async (params) => {
     try {
       const { system, messages } = params;
       const url = `${this.baseURL}/messages`;
@@ -27,14 +27,14 @@ export class ClaudeAdapter implements LMAdapter {
         system,
         messages,
       };
-      const { data } = await axios.post<ApiResponse>(url, body, { headers });
+      const { data } = await axios.post<ChatResponse>(url, body, { headers });
       return data.content?.[0]?.text ?? null;
     } catch (error) {
       return handleRequestError("Error in ClaudeAdapter.chat:", error);
     }
   }
 
-  async models(): Promise<string[] | null> {
+  models:LMAdapter["models"] = async () => {
     try {
       const url = `${this.baseURL}/models`;
       const headers = {
@@ -42,7 +42,7 @@ export class ClaudeAdapter implements LMAdapter {
         "anthropic-version": "2023-06-01",
         "Content-Type": "application/json",
       };
-      const { data } = await axios.get<ClaudeModelsResponse>(url, {
+      const { data } = await axios.get<ModelsResponse>(url, {
         headers,
       });
       const models = data.data?.map(({ id }) => id).sort() ?? [];
@@ -54,14 +54,14 @@ export class ClaudeAdapter implements LMAdapter {
 }
 
 // Interfaces
-interface ApiResponse {
+interface ChatResponse {
   content?: {
     type: string;
     text: string;
   }[];
 }
 
-type ClaudeModelsResponse = {
+type ModelsResponse = {
   data: Array<{
     type: string;
     id: string;

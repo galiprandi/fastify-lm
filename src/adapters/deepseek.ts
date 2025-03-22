@@ -1,10 +1,10 @@
+import type { LMAdapter } from "../types";
 import axios from "axios";
-import { LMAdapter, LMChatParams, Adapter } from "../types";
 import { handleRequestError } from "../utils";
 
-export class DeepSeekAdapter implements LMAdapter, Adapter {
-  public apiKey: string;
-  public model: string;
+export class DeepSeekAdapter implements LMAdapter {
+  private apiKey: string;
+  private model: string;
   private baseURL: string = "https://api.deepseek.com";
 
   constructor(apiKey: string, model: string) {
@@ -18,16 +18,16 @@ export class DeepSeekAdapter implements LMAdapter, Adapter {
     };
   }
 
-  async chat(params: LMChatParams): Promise<string | null> {
+  chat: LMAdapter["chat"] = async (params) => {
     try {
       const { system, messages } = params;
       const url = `${this.baseURL}/chat/completions`;
       const headers = this.getHeaders();
       const body = {
         model: this.model,
-        messages,
+        messages: [{ role: "system", content: system }, ...messages],
       };
-      const { data } = await axios.post<DeepSeekResponse>(url, body, {
+      const { data } = await axios.post<ChatResponse>(url, body, {
         headers,
       });
       return data.choices?.[0]?.message?.content ?? null;
@@ -36,11 +36,11 @@ export class DeepSeekAdapter implements LMAdapter, Adapter {
     }
   }
 
-  async models(): Promise<string[] | null> {
+  models:LMAdapter["models"] = async () => {
     try {
       const url = `${this.baseURL}/models`;
       const headers = this.getHeaders();
-      const { data } = await axios.get<DeepSeekModelsResponse>(
+      const { data } = await axios.get<ModelsResponse>(
         url,
         { headers },
       );
@@ -53,7 +53,7 @@ export class DeepSeekAdapter implements LMAdapter, Adapter {
 }
 
 // Interfaces
-interface DeepSeekResponse  {
+interface ChatResponse  {
   id: string
   choices: {
     finish_reason: string
@@ -73,6 +73,6 @@ interface DeepSeekResponse  {
   }
 }
 
-interface DeepSeekModelsResponse {
+interface ModelsResponse {
   data?: { id: string }[];
 }

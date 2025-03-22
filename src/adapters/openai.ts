@@ -1,6 +1,7 @@
+import type { LMAdapter } from "../types";
 import axios from "axios";
-import { LMAdapter, LMChatParams } from "../types";
 import { handleRequestError } from "../utils";
+
 
 export class OpenAIAdapter implements LMAdapter {
   private apiKey: string;
@@ -12,7 +13,7 @@ export class OpenAIAdapter implements LMAdapter {
     this.model = model;
   }
 
-  async chat(params: LMChatParams): Promise<string | null> {
+  chat: LMAdapter["chat"] = async (params) => {
     try {
       const { system, messages } = params;
       const url = `${this.baseURL}/chat/completions`;
@@ -24,21 +25,21 @@ export class OpenAIAdapter implements LMAdapter {
         model: this.model,
         messages: [{ role: "system", content: system }, ...messages],
       };
-      const { data } = await axios.post<OpenAIResponse>(url, body, { headers });
+      const { data } = await axios.post<ChatResponse>(url, body, { headers });
       return data.choices?.[0]?.message?.content ?? null;
     } catch (error) {
       return handleRequestError("Error in OpenAIAdapter.chat:", error);
     }
   }
 
-  async models(): Promise<string[] | null> {
+  models:LMAdapter["models"] = async () => {
     try {
       const url = `${this.baseURL}/models`;
       const headers = {
         Authorization: `Bearer ${this.apiKey}`,
         "Content-Type": "application/json",
       };
-      const { data } = await axios.get<OpenAIModelsResponse>(url, { headers });
+      const { data } = await axios.get<ModelsResponse>(url, { headers });
       const models = data.data?.map(({ id }) => id).sort() ?? [];
       return models;
     } catch (error) {
@@ -48,10 +49,10 @@ export class OpenAIAdapter implements LMAdapter {
 }
 
 // Interfaces
-interface OpenAIResponse {
+interface ChatResponse {
   choices?: { message?: { content: string } }[];
 }
 
-interface OpenAIModelsResponse {
+interface ModelsResponse {
   data?: { id: string }[];
 }

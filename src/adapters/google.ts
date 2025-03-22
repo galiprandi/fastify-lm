@@ -1,5 +1,5 @@
+import type { LMAdapter } from "../types";
 import axios from "axios";
-import { LMAdapter, LMChatParams } from "../types";
 import { handleRequestError } from "../utils";
 
 export class GoogleGeminiAdapter implements LMAdapter {
@@ -13,7 +13,7 @@ export class GoogleGeminiAdapter implements LMAdapter {
     this.baseURL = `https://generativelanguage.googleapis.com/v1beta/models`;
   }
 
-  async chat(params: LMChatParams): Promise<string | null> {
+  chat:LMAdapter["chat"] = async (params) => {
     try {
       const { system, messages } = params;
       const url = `${this.baseURL}/${this.model}:generateContent?key=${this.apiKey}`;
@@ -27,17 +27,17 @@ export class GoogleGeminiAdapter implements LMAdapter {
           },
         ],
       };
-      const { data } = await axios.post<GeminiResponse>(url, body);
+      const { data } = await axios.post<ChatResponse>(url, body);
       return data.candidates?.[0]?.content?.parts?.[0]?.text ?? null;
     } catch (error) {
       return handleRequestError("Error in GoogleGeminiAdapter.chat:", error);
     }
   }
 
-  async models(): Promise<string[] | null> {
+  models:LMAdapter["models"] = async () => {
     try {
       const url = `${this.baseURL}?key=${this.apiKey}`;
-      const { data } = await axios.get<GeminiModelsResponse>(url);
+      const { data } = await axios.get<ModelsResponse>(url);
       const models = data.models?.map((model) => model.name).sort() ?? [];
       return models;
     } catch (error) {
@@ -47,7 +47,7 @@ export class GoogleGeminiAdapter implements LMAdapter {
 }
 
 // Interfaces
-interface GeminiResponse {
+interface ChatResponse {
   candidates?: {
     content?: {
       parts?: { text: string }[];
@@ -55,6 +55,6 @@ interface GeminiResponse {
   }[];
 }
 
-interface GeminiModelsResponse {
+interface ModelsResponse {
   models?: { name: string }[];
 }
