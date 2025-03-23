@@ -11,6 +11,7 @@
 | **Google**  | Gemini models, such as Gemini 1.5  |
 | **Claude**  | Anthropic’s Claude models (Claude 3, etc.) |
 | **Deepseek** | Deepseek AI language models        |
+| **Llama** | Llama AI language models            |
 
 It provides a **unified interface**, allowing you to switch providers without modifying your application code.  
 

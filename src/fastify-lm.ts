@@ -10,6 +10,7 @@ import { GoogleGeminiAdapter } from './adapters/google'
 import { ClaudeAdapter } from './adapters/claude'
 import { DeepSeekAdapter } from './adapters/deepseek'
 import { TestAdapter } from './adapters/testAdapter'
+import { LlamaAdapter } from './adapters/llama'
 
 /**
  * Available adapters
@@ -20,6 +21,7 @@ const availableAdapters: AvailableAdapters = {
   google: GoogleGeminiAdapter,
   claude: ClaudeAdapter,
   deepseek: DeepSeekAdapter,
+  llama: LlamaAdapter,
 } as const
 
 /**

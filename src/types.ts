@@ -1,4 +1,4 @@
-type LMProviders = 'test' | 'openai' | 'google' | 'deepseek' | 'claude'
+type LMProviders = 'test' | 'openai' | 'google' | 'deepseek' | 'claude' | 'llama'
 
 export interface LMAdapter {
   chat(params: {
