@@ -1,25 +1,38 @@
-# fastify-lm
+# fastify-lm  
 
-## What is fastify-lm?
+## What is fastify-lm?  
 
-fastify-lm is a [Fastify](https://www.fastify.io/) plugin that integrates multiple language model (LM) providers into your application. It offers a unified interface to interact with providers such as OpenAI, Google, Claude, and Deepseek, allowing easy switching and testing of different models without changing the plugin.
+`fastify-lm` is a **Fastify plugin** that simplifies integration with multiple **language model (LM) providers**, such as:  
 
-## Features
+| Provider  | Description                          |
+|-----------|--------------------------------------|
+| **OpenAI**  | GPT models, including GPT-4o, GPT-3.5 |
+| **Google**  | Gemini models, such as Gemini 1.5  |
+| **Claude**  | Anthropic’s Claude models (Claude 3, etc.) |
+| **Deepseek** | Deepseek AI language models        |
 
-- **Unified Interface:** Easily connect with multiple providers.
-- **Flexibility:** Supports single or multiple providers simultaneously.
-- **Simplicity:** Change providers using environment variables.
-- **TypeScript:** Fully built in TypeScript and includes built-in type definitions.
+It provides a **unified interface**, allowing you to switch providers without modifying your application code.  
 
-## Available Providers
+### 🔥 **Why use fastify-lm?**  
+Developing applications that interact with language models usually requires direct API integration, which can lead to:  
+- 🔗 **Dependency on a single provider**  
+- 🔄 **Difficulty switching models without refactoring code**  
+- ❌ **Inconsistencies in how different APIs are used**  
 
-| Provider | Description                |
-| -------- | -------------------------- |
-| Test     | Test provider              |
-| OpenAI   | OpenAI's GPT models        |
-| Google   | Google's language models   |
-| Claude   | Anthropic's language model |
-| Deepseek | Deepseek AI models         |
+With `fastify-lm`, you can:  
+✅ Define multiple providers in a single configuration  
+✅ Switch models just by changing environment variables  
+✅ Use a **consistent query system** without worrying about API differences  
+✅ Easily run A/B tests with different models to find the best fit for your use case  
+
+### 🛠 **Use Cases**  
+- **Chatbots and virtual assistants**: Seamlessly integrate multiple AI models to enhance user experience.  
+- **Natural Language Processing (NLP)**: Analyze text using different models without modifying your code.  
+- **Model comparison**: Evaluate different LMs within the same application with minimal changes.  
+- **Flexible infrastructure**: Switch providers based on availability, cost, or technological improvements.
+- **Analyze requests**: Moderate or analyze requests using language models.
+
+🚀 **Ready to get started?** Continue with the installation guide and start using `fastify-lm` in just a few minutes.  
 
 ## Installation
 
@@ -250,6 +263,50 @@ interface AskQuery {
   model: "openai" | "google"; // Extendable based on the registered providers
 }
 ```
+
+  ## Advanced Use Cases
+
+Beyond simple model queries, you can leverage `fastify-lm` for more advanced functionalities:
+
+### 🤖 Automated Customer Support Responses
+Use AI to generate instant answers for common support queries.  
+[📖 Read the full guide →](docs/support-bot.md)
+
+### 🎫 AI-Powered Support Ticket Prioritization
+Automatically classify and prioritize support tickets based on urgency and sentiment.  
+[📖 Read the full guide →](docs/support-ticket-prioritization.md)
+
+### 📢 AI-Driven Sentiment Analysis
+Analyze user feedback, reviews, or messages to determine sentiment trends.  
+[📖 Read the full guide →](docs/sentiment-analysis.md)
+
+### 📌 Automatic Content Moderation
+Detect and block inappropriate messages before processing them.  
+[📖 Read the full guide →](docs/content-moderation.md)
+
+### 🔍 Semantic Search & Query Expansion
+Improve search relevance by understanding intent and expanding queries intelligently.  
+[📖 Read the full guide →](docs/semantic-search.md)
+
+### ✨ Smart Autocomplete for Forms
+Enhance user input by automatically generating text suggestions.  
+[📖 Read the full guide →](docs/autocomplete.md)
+
+### 📄 Automatic Text Summarization
+Summarize long text passages using AI models.  
+[📖 Read the full guide →](docs/summarizer.md)
+
+### 🌍 Real-Time Text Translation
+Translate user input dynamically with multi-provider support.  
+[📖 Read the full guide →](docs/translator.md)
+
+### 📊 AI-Powered Data Extraction
+Extract structured information from unstructured text, such as invoices, legal documents, or reports.  
+[📖 Read the full guide →](docs/data-extraction.md)
+
+🚀 **Check out more examples in the [`/docs/`](docs/) folder!**
+
+
 
 ## Contributing
 
