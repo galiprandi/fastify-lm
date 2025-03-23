@@ -7,7 +7,7 @@ export class MistralAdapter implements LMAdapter {
   private model: string
   private baseURL: string = 'https://api.mistral.ai/v1'
 
-  constructor(apiKey: string, model: string) {
+  constructor (apiKey: string, model: string) {
     this.apiKey = apiKey
     this.model = model
   }

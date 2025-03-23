@@ -105,20 +105,20 @@ describe('LlamaAdapter', () => {
     it('should return an empty array and not make any API calls', async () => {
       // Espiar console.info
       const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {})
-      
+
       const models = await adapter.models()
-      
+
       // Verificar que se devuelve un array vacío
       expect(models).toEqual([])
-      
+
       // Verificar que se muestra el mensaje informativo
       expect(consoleInfoSpy).toHaveBeenCalledWith(
         '⛔ The model list is not available for LlamaAdapter. Please check the documentation at https://docs.llama-api.com/quickstart#available-models.'
       )
-      
+
       // Verificar que no se hace ninguna llamada a axios.get
       expect(mockAxios.get).not.toHaveBeenCalled()
-      
+
       // Restaurar console.info
       consoleInfoSpy.mockRestore()
     })

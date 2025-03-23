@@ -24,7 +24,7 @@ export class LlamaAdapter implements LMAdapter {
         model: this.model,
         messages: [{ role: 'system', content: system }, ...messages],
       }
-      const { data } = await axios.post(url, body, { headers })
+      const { data } = await axios.post<ChatResponse>(url, body, { headers })
       return data.choices?.[0]?.message?.content ?? null
     } catch (error) {
       return handleRequestError('Error in LlamaAdapter.chat:', error)
