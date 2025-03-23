@@ -5,12 +5,13 @@ When adding a new language model adapter, follow these steps:
 ## 1. Create the adapter file
 
 - Create a new file in `src/adapters/` named after the provider (e.g., `provider-name.ts`)
-- Implement the `LMAdapter` interface with `chat` and `models` methods
+- Implement the `LM.Adapter` interface with `chat` and `models` methods
 - Use axios for HTTP requests and handle errors consistently
 
 ## 2. Update type definitions
 
-- Add the new provider to the `LMProviders` type in `src/types.ts`
+- Add the new provider to the `LM.Providers` type in `src/lm-namespace.ts`
+- Add the new provider to the `LM.ProviderSpecificOptions` type in `src/lm-namespace.ts`
 
 ## 3. Register the adapter
 
@@ -23,10 +24,6 @@ When adding a new language model adapter, follow these steps:
 - Test the constructor, chat method, and models method
 - Mock API responses using the axios mock
 
-## 4. Update documentation
-
-- Add the new provider to the [Providers](../README.md#providers) section in the README
-
 ## 5. Version update
 
 - Increment the version in `package.json` following semantic versioning
@@ -35,20 +32,19 @@ When adding a new language model adapter, follow these steps:
 
 ```typescript
 import axios from 'axios'
-import type { LMAdapter } from '../types.js'
+import type { LM } from '../lm-namespace.js'
 import { handleRequestError } from '../utils.js'
+import { BaseLMAdapter } from '../base-adapter.js'
 
-export class NewProviderAdapter implements LMAdapter {
-  private apiKey: string
-  private model: string
+export class NewProviderAdapter extends BaseLMAdapter {
   private baseURL: string = 'https://api.provider.com'
 
-  constructor(apiKey: string, model: string) {
-    this.apiKey = apiKey
-    this.model = model
+  constructor (apiKey: string, model: string, options?: LM.ProviderSpecificOptions['new-provider']) {
+    super(apiKey, model, options)
+    this.baseURL = options?.baseURL || 'https://api.provider.com'
   }
 
-  chat: LMAdapter['chat'] = async (params) => {
+  chat: LM.Adapter['chat'] = async (params) => {
     try {
       const { system, messages } = params
       const url = `${this.baseURL}/chat/completions`
@@ -58,16 +54,16 @@ export class NewProviderAdapter implements LMAdapter {
       }
       const body = {
         model: this.model,
-        messages: [{ role: 'system', content: system }, ...messages],
+        messages: [system ? { role: 'system', content: system } : undefined, ...messages],
       }
-      const { data } = await axios.post(url, body, { headers })
+      const { data } = await axios.post<ChatResponse>(url, body, { headers })
       return data.choices?.[0]?.message?.content ?? null
     } catch (error) {
       return handleRequestError('Error in NewProviderAdapter.chat:', error)
     }
   }
 
-  models: LMAdapter['models'] = async () => {
+  models: LM.Adapter['models'] = async () => {
     try {
       const url = `${this.baseURL}/models`
       const headers = {

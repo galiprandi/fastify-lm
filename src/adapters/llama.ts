@@ -1,18 +1,17 @@
-import type { LMAdapter } from '../types.js'
 import axios from 'axios'
+import type { LM } from '../lm-namespace.js'
 import { handleRequestError } from '../utils.js'
+import { BaseLMAdapter } from '../base-adapter.js'
 
-export class LlamaAdapter implements LMAdapter {
-  private apiKey: string
-  private model: string
-  private baseURL: string = 'https://api.llama-api.com'
+export class LlamaAdapter extends BaseLMAdapter {
+  private baseURL: string
 
-  constructor (apiKey: string, model: string) {
-    this.apiKey = apiKey
-    this.model = model
+  constructor (apiKey: string, model: string, options?: LM.ProviderSpecificOptions['llama']) {
+    super(apiKey, model)
+    this.baseURL = options?.baseURL || 'https://api.llama-api.com'
   }
 
-  chat: LMAdapter['chat'] = async (params) => {
+  chat: LM.Adapter['chat'] = async (params) => {
     try {
       const { system, messages } = params
       const url = `${this.baseURL}/chat/completions`
@@ -22,7 +21,7 @@ export class LlamaAdapter implements LMAdapter {
       }
       const body = {
         model: this.model,
-        messages: [{ role: 'system', content: system }, ...messages],
+        messages: [system ? { role: 'system', content: system } : undefined, ...messages],
       }
       const { data } = await axios.post<ChatResponse>(url, body, { headers })
       return data.choices?.[0]?.message?.content ?? null
@@ -31,7 +30,7 @@ export class LlamaAdapter implements LMAdapter {
     }
   }
 
-  models: LMAdapter['models'] = async () => {
+  models: LM.Adapter['models'] = async () => {
     console.info('⛔ The model list is not available for LlamaAdapter. Please check the documentation at https://docs.llama-api.com/quickstart#available-models.')
     return []
   }

@@ -1,15 +1,14 @@
-import type { LMAdapter } from '../types.js'
 import axios from 'axios'
+import type { LM } from '../lm-namespace.js'
 import { handleRequestError } from '../utils.js'
+import { BaseLMAdapter } from '../base-adapter.js'
 
-export class DeepSeekAdapter implements LMAdapter {
-  private apiKey: string
-  private model: string
-  private baseURL: string = 'https://api.deepseek.com'
+export class DeepSeekAdapter extends BaseLMAdapter {
+  private baseURL: string
 
-  constructor (apiKey: string, model: string) {
-    this.apiKey = apiKey
-    this.model = model
+  constructor (apiKey: string, model: string, options?: LM.ProviderSpecificOptions['deepseek']) {
+    super(apiKey, model, options)
+    this.baseURL = options?.baseURL || 'https://api.deepseek.com'
   }
 
   private getHeaders () {
@@ -18,14 +17,14 @@ export class DeepSeekAdapter implements LMAdapter {
     }
   }
 
-  chat: LMAdapter['chat'] = async (params) => {
+  chat: LM.Adapter['chat'] = async (params) => {
     try {
       const { system, messages } = params
       const url = `${this.baseURL}/chat/completions`
       const headers = this.getHeaders()
       const body = {
         model: this.model,
-        messages: [{ role: 'system', content: system }, ...messages],
+        messages: [system ? { role: 'system', content: system } : undefined, ...messages],
       }
       const { data } = await axios.post<ChatResponse>(url, body, {
         headers,
@@ -36,7 +35,7 @@ export class DeepSeekAdapter implements LMAdapter {
     }
   }
 
-  models:LMAdapter['models'] = async () => {
+  models:LM.Adapter['models'] = async () => {
     try {
       const url = `${this.baseURL}/models`
       const headers = this.getHeaders()

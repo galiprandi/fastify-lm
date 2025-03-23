@@ -1,18 +1,17 @@
-import type { LMAdapter } from '../types.js'
 import axios from 'axios'
+import type { LM } from '../lm-namespace.js'
 import { handleRequestError } from '../utils.js'
+import { BaseLMAdapter } from '../base-adapter.js'
 
-export class ClaudeAdapter implements LMAdapter {
-  public apiKey: string
-  public model: string
-  private baseURL: string = 'https://api.anthropic.com/v1'
+export class ClaudeAdapter extends BaseLMAdapter {
+  private baseURL: string
 
-  constructor (apiKey: string, model: string) {
-    this.apiKey = apiKey
-    this.model = model
+  constructor (apiKey: string, model: string, options?: LM.ProviderSpecificOptions['claude']) {
+    super(apiKey, model, options)
+    this.baseURL = options?.baseURL || 'https://api.anthropic.com/v1'
   }
 
-  chat:LMAdapter['chat'] = async (params) => {
+  chat: LM.Adapter['chat'] = async (params) => {
     try {
       const { system, messages } = params
       const url = `${this.baseURL}/messages`
@@ -34,7 +33,7 @@ export class ClaudeAdapter implements LMAdapter {
     }
   }
 
-  models:LMAdapter['models'] = async () => {
+  models: LM.Adapter['models'] = async () => {
     try {
       const url = `${this.baseURL}/models`
       const headers = {

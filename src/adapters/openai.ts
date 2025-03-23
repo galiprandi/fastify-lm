@@ -1,18 +1,17 @@
-import type { LMAdapter } from '../types.js'
 import axios from 'axios'
+import type { LM } from '../lm-namespace.js'
 import { handleRequestError } from '../utils.js'
+import { BaseLMAdapter } from '../base-adapter.js'
 
-export class OpenAIAdapter implements LMAdapter {
-  private apiKey: string
-  private model: string
-  private baseURL: string = 'https://api.openai.com/v1'
+export class OpenAIAdapter extends BaseLMAdapter {
+  private baseURL: string
 
-  constructor (apiKey: string, model: string) {
-    this.apiKey = apiKey
-    this.model = model
+  constructor (apiKey: string, model: string, options?: LM.ProviderSpecificOptions['openai']) {
+    super(apiKey, model, options)
+    this.baseURL = options?.baseURL || 'https://api.openai.com/v1'
   }
 
-  chat: LMAdapter['chat'] = async (params) => {
+  chat: LM.Adapter['chat'] = async (params) => {
     try {
       const { system, messages } = params
       const url = `${this.baseURL}/chat/completions`
@@ -31,7 +30,7 @@ export class OpenAIAdapter implements LMAdapter {
     }
   }
 
-  models:LMAdapter['models'] = async () => {
+  models:LM.Adapter['models'] = async () => {
     try {
       const url = `${this.baseURL}/models`
       const headers = {

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import Fastify from 'fastify'
 import fastifyLm from './fastify-lm.js'
 import type { FastifyInstance } from 'fastify'
-import type { LMPluginOptions } from './types.js'
+import { LM } from './lm-namespace.js'
 
 describe('fastify-lm plugin', () => {
   let fastify: FastifyInstance
@@ -16,7 +16,7 @@ describe('fastify-lm plugin', () => {
   })
 
   it('should register the plugin with valid options', async () => {
-    const options: LMPluginOptions = {
+    const options: LM.PluginOptions = {
       models: [
         {
           name: 'testLm',
@@ -32,7 +32,7 @@ describe('fastify-lm plugin', () => {
   })
 
   it('should throw an error if models array is missing', async () => {
-    const options = {} as LMPluginOptions
+    const options = {} as LM.PluginOptions
 
     await expect(fastify.register(fastifyLm, options)).rejects.toThrow(
       'You must provide an array of models.'
@@ -40,7 +40,7 @@ describe('fastify-lm plugin', () => {
   })
 
   it('should throw an error if models array is empty', async () => {
-    const options: LMPluginOptions = {
+    const options: LM.PluginOptions = {
       models: []
     }
 
@@ -50,7 +50,7 @@ describe('fastify-lm plugin', () => {
   })
 
   it('should throw an error if model config is missing required fields', async () => {
-    const options: LMPluginOptions = {
+    const options: LM.PluginOptions = {
       models: [
         {
           name: 'testLm',
@@ -61,12 +61,12 @@ describe('fastify-lm plugin', () => {
     }
 
     await expect(fastify.register(fastifyLm, options)).rejects.toThrow(
-      'Model configuration is missing required fields'
+      `Model configuration "${options.models[0].name}" is missing "model" field`
     )
   })
 
   it('should throw an error if provider is not supported', async () => {
-    const options: LMPluginOptions = {
+    const options: LM.PluginOptions = {
       models: [
         {
           name: 'testLm',
@@ -83,7 +83,7 @@ describe('fastify-lm plugin', () => {
   })
 
   it('should register multiple models', async () => {
-    const options: LMPluginOptions = {
+    const options: LM.PluginOptions = {
       models: [
         {
           name: 'testLm1',

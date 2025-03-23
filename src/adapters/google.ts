@@ -1,19 +1,17 @@
-import type { LMAdapter } from '../types.js'
 import axios from 'axios'
+import type { LM } from '../lm-namespace.js'
 import { handleRequestError } from '../utils.js'
+import { BaseLMAdapter } from '../base-adapter.js'
 
-export class GoogleGeminiAdapter implements LMAdapter {
-  private apiKey: string
-  private model: string
+export class GoogleGeminiAdapter extends BaseLMAdapter {
   private baseURL: string
 
-  constructor (apiKey: string, model: string) {
-    this.apiKey = apiKey
-    this.model = model
+  constructor (apiKey: string, model: string, options?: LM.ProviderSpecificOptions['google']) {
+    super(apiKey, model, options)
     this.baseURL = 'https://generativelanguage.googleapis.com/v1beta/models'
   }
 
-  chat:LMAdapter['chat'] = async (params) => {
+  chat:LM.Adapter['chat'] = async (params) => {
     try {
       const { system, messages } = params
       const url = `${this.baseURL}/${this.model}:generateContent?key=${this.apiKey}`
@@ -21,8 +19,8 @@ export class GoogleGeminiAdapter implements LMAdapter {
         contents: [
           {
             parts: [
+              system ? { text: system } : undefined,
               ...messages.map(({ content: text }) => ({ text })),
-              { text: system },
             ],
           },
         ],
@@ -34,7 +32,7 @@ export class GoogleGeminiAdapter implements LMAdapter {
     }
   }
 
-  models:LMAdapter['models'] = async () => {
+  models:LM.Adapter['models'] = async () => {
     try {
       const url = `${this.baseURL}?key=${this.apiKey}`
       const { data } = await axios.get<ModelsResponse>(url)

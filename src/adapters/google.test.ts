@@ -57,8 +57,8 @@ describe('GoogleGeminiAdapter', () => {
           contents: [
             {
               parts: [
+                { text: 'You are a helpful assistant' },
                 { text: 'Hello' },
-                { text: 'You are a helpful assistant' }
               ]
             }
           ]
