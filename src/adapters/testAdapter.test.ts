@@ -29,14 +29,14 @@ describe('TestAdapter', () => {
       }
 
       const response = await adapter.chat(params)
-      
+
       expect(response).toBe('test: ' + JSON.stringify(params))
     })
 
     it('should handle errors gracefully', async () => {
       // Mock console.error to prevent test output pollution
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-      
+
       // Mock setTimeout to throw an error
       const originalSetTimeout = global.setTimeout
       global.setTimeout = vi.fn().mockImplementationOnce((callback) => {
@@ -49,13 +49,13 @@ describe('TestAdapter', () => {
       }
 
       const response = await adapter.chat(params)
-      
+
       // Verify the result is null
       expect(response).toBeNull()
-      
+
       // Verify console.error was called
       expect(consoleErrorSpy).toHaveBeenCalled()
-      
+
       // Restore original implementations
       global.setTimeout = originalSetTimeout
       consoleErrorSpy.mockRestore()
@@ -71,7 +71,7 @@ describe('TestAdapter', () => {
     it('should handle errors gracefully', async () => {
       // Mock console.error to prevent test output pollution
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-      
+
       // Mock setTimeout to throw an error
       const originalSetTimeout = global.setTimeout
       global.setTimeout = vi.fn().mockImplementationOnce((callback) => {
@@ -79,13 +79,13 @@ describe('TestAdapter', () => {
       }) as any
 
       const models = await adapter.models()
-      
+
       // Verify the result is null
       expect(models).toBeNull()
-      
+
       // Verify console.error was called
       expect(consoleErrorSpy).toHaveBeenCalled()
-      
+
       // Restore original implementations
       global.setTimeout = originalSetTimeout
       consoleErrorSpy.mockRestore()

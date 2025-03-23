@@ -30,6 +30,7 @@
   },
   "scripts": {
     "build": "tsup src/index.ts --dts",
+    "prebuild": "npm run lint:fix && npm run test",
     "prepublishOnly": "npm run build",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
