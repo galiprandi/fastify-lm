@@ -1,6 +1,6 @@
-import type { LMAdapter } from '../types'
+import type { LMAdapter } from '../types.js'
 import axios from 'axios'
-import { handleRequestError } from '../utils'
+import { handleRequestError } from '../utils.js'
 
 export class OpenAIAdapter implements LMAdapter {
   private apiKey: string

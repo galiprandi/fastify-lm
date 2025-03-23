@@ -2,16 +2,16 @@ import fp from 'fastify-plugin'
 
 // Types
 import type { FastifyInstance } from 'fastify'
-import type { AvailableAdapters, LMPluginOptions } from './types'
+import type { AvailableAdapters, LMPluginOptions } from './types.js'
 
 // Adapters
-import { OpenAIAdapter } from './adapters/openai'
-import { GoogleGeminiAdapter } from './adapters/google'
-import { ClaudeAdapter } from './adapters/claude'
-import { DeepSeekAdapter } from './adapters/deepseek'
-import { TestAdapter } from './adapters/testAdapter'
-import { LlamaAdapter } from './adapters/llama'
-import { MistralAdapter } from './adapters/mistral'
+import { OpenAIAdapter } from './adapters/openai.js'
+import { GoogleGeminiAdapter } from './adapters/google.js'
+import { ClaudeAdapter } from './adapters/claude.js'
+import { DeepSeekAdapter } from './adapters/deepseek.js'
+import { TestAdapter } from './adapters/testAdapter.js'
+import { LlamaAdapter } from './adapters/llama.js'
+import { MistralAdapter } from './adapters/mistral.js'
 
 /**
  * Available adapters

@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { GoogleGeminiAdapter } from './google'
-import { mockAxios } from '../__mocks__/axios'
+import { GoogleGeminiAdapter } from './google.js'
+import { mockAxios } from '../__mocks__/axios.js'
 
 vi.mock('axios', async () => {
-  return await import('../__mocks__/axios')
+  return await import('../__mocks__/axios.js')
 })
 
 describe('GoogleGeminiAdapter', () => {

@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { OpenAIAdapter } from './openai'
-import { mockAxios } from '../__mocks__/axios'
+import { OpenAIAdapter } from './openai.js'
+import { mockAxios } from '../__mocks__/axios.js'
 
 vi.mock('axios', async () => {
-  return await import('../__mocks__/axios')
+  return await import('../__mocks__/axios.js')
 })
 
 describe('OpenAIAdapter', () => {

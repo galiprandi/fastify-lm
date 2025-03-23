@@ -1,1 +1,1 @@
-export { default } from './fastify-lm'
+export { default } from './fastify-lm.js'

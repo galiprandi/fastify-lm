@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import Fastify from 'fastify'
-import fastifyLm from './fastify-lm'
+import fastifyLm from './fastify-lm.js'
 import type { FastifyInstance } from 'fastify'
-import type { LMPluginOptions } from './types'
+import type { LMPluginOptions } from './types.js'
 
 describe('fastify-lm plugin', () => {
   let fastify: FastifyInstance

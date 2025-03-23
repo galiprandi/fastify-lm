@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { TestAdapter } from './testAdapter'
+import { TestAdapter } from './testAdapter.js'
 
 describe('TestAdapter', () => {
   const apiKey = 'test-api-key'

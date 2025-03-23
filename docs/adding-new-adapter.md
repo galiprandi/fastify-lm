@@ -34,9 +34,9 @@ When adding a new language model adapter, follow these steps:
 ## Example adapter structure
 
 ```typescript
-import type { LMAdapter } from '../types'
 import axios from 'axios'
-import { handleRequestError } from '../utils'
+import type { LMAdapter } from '../types.js'
+import { handleRequestError } from '../utils.js'
 
 export class NewProviderAdapter implements LMAdapter {
   private apiKey: string
