@@ -11,6 +11,7 @@ import { ClaudeAdapter } from './adapters/claude'
 import { DeepSeekAdapter } from './adapters/deepseek'
 import { TestAdapter } from './adapters/testAdapter'
 import { LlamaAdapter } from './adapters/llama'
+import { MistralAdapter } from './adapters/mistral'
 
 /**
  * Available adapters
@@ -22,6 +23,7 @@ const availableAdapters: AvailableAdapters = {
   claude: ClaudeAdapter,
   deepseek: DeepSeekAdapter,
   llama: LlamaAdapter,
+  mistral: MistralAdapter,
 } as const
 
 /**

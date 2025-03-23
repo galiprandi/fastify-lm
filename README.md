@@ -12,6 +12,7 @@
 | **Claude**  | Anthropic’s Claude models (Claude 3, etc.) |
 | **Deepseek** | Deepseek AI language models        |
 | **Llama** | Llama AI language models            |
+| **Mistral** | Mistral AI language models         |
 
 It provides a **unified interface**, allowing you to switch providers without modifying your application code.  
 
@@ -183,6 +184,12 @@ app.register(lmPlugin, {
       model: "deepseek-chat",
       apiKey: process.env.DEEPSEEK_API_KEY,
     },
+    {
+      name: "mistral",
+      provider: "mistral",
+      model: "mistral-medium",
+      apiKey: process.env.MISTRAL_API_KEY,
+    },
   ],
 });
 
@@ -213,7 +220,24 @@ app.register(lmPlugin, {
       model: "gemini-2.0-flash-lite",
       apiKey: process.env.GOOGLE_API_KEY,
     },
-    // Additional providers can be added as needed
+    {
+      name: "claude",
+      provider: "claude",
+      model: "claude-3-5-sonnet-20240620",
+      apiKey: process.env.CLAUDE_API_KEY,
+    },
+    {
+      name: "deepseek",
+      provider: "deepseek",
+      model: "deepseek-chat",
+      apiKey: process.env.DEEPSEEK_API_KEY,
+    },
+    {
+      name: "mistral",
+      provider: "mistral",
+      model: "mistral-medium",
+      apiKey: process.env.MISTRAL_API_KEY,
+    },
   ],
 });
 
@@ -262,7 +286,7 @@ app.listen({ port: 3000 }, (err, address) => {
 
 interface AskQuery {
   query: string;
-  model: "openai" | "google"; // Extendable based on the registered providers
+  model: "openai" | "google" | "claude" | "deepseek" | "mistral"; // Extendable based on the registered providers
 }
 ```
 
