@@ -9,11 +9,13 @@ import { OpenAIAdapter } from './adapters/openai'
 import { GoogleGeminiAdapter } from './adapters/google'
 import { ClaudeAdapter } from './adapters/claude'
 import { DeepSeekAdapter } from './adapters/deepseek'
+import { TestAdapter } from './adapters/testAdapter'
 
 /**
  * Available adapters
  */
 const availableAdapters: AvailableAdapters = {
+  test: TestAdapter,
   openai: OpenAIAdapter,
   google: GoogleGeminiAdapter,
   claude: ClaudeAdapter,
