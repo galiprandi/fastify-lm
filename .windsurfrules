@@ -1,0 +1,18 @@
+Coding Rules and Style Guide for fastify-lm
+
+## Coding Rules
+- TypeScript is used with a strict configuration to ensure quality code.
+- A coding style similar to Airbnb or Standard, adapted to TypeScript is followed.
+- camelCase is used for variables and functions, and PascalCase for classes.
+- The use of async/await is favored for handling asynchronous operations.
+- Modularity and code reuse are promoted, keeping functions small and well-defined.
+- JSDoc documentation is included for functions and classes that require it.
+
+## Test Style Rules
+- Tests are written in TypeScript and are structured in files ending with .test.ts.
+- A testing framework (such as Jest) is used for executing and organizing tests.
+- 'describe' and 'it/test' blocks are used to clearly organize test cases.
+- Each test is isolated, with configurations and mocks when necessary, to avoid dependencies among them.
+- Clarity and precision in assertions are prioritized to facilitate error identification.
+
+This file serves as a guide to maintain a uniform standard in development and testing within the fastify-lm project.
