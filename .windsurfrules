@@ -15,4 +15,7 @@ Coding Rules and Style Guide for fastify-lm
 - Each test is isolated, with configurations and mocks when necessary, to avoid dependencies among them.
 - Clarity and precision in assertions are prioritized to facilitate error identification.
 
+## Adding a New Adapter
+The documentation for adding a new adapter is available in the [Adding a New Adapter](docs/adding-new-adapter.md) file.
+
 This file serves as a guide to maintain a uniform standard in development and testing within the fastify-lm project.

@@ -314,6 +314,8 @@ Extract structured information from unstructured text, such as invoices, legal d
 
 We need a lot of hands to implement other providers you can help us by submitting a pull request.
 
+[📖 Adding a New Adapter](docs/adding-new-adapter.md)
+
 ## License
 
 MIT
