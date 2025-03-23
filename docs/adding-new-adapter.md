@@ -23,6 +23,10 @@ When adding a new language model adapter, follow these steps:
 - Test the constructor, chat method, and models method
 - Mock API responses using the axios mock
 
+## 4. Update documentation
+
+- Add the new provider to the [Providers](../README.md#providers) section in the README
+
 ## 5. Version update
 
 - Increment the version in `package.json` following semantic versioning
@@ -70,7 +74,7 @@ export class NewProviderAdapter implements LMAdapter {
         Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
       }
-      const { data } = await axios.get(url, { headers })
+      const { data } = await axios.get<ModelResponse>(url, { headers })
       const models = data.data?.map(({ id }) => id).sort() ?? []
       return models
     } catch (error) {
@@ -82,5 +86,9 @@ export class NewProviderAdapter implements LMAdapter {
 // Interfaces
 interface ChatResponse {
   choices?: { message?: { content: string } }[];
+}
+
+interface ModelResponse {
+  data?: { id: string }[];
 }
 ```
