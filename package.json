@@ -1,26 +1,44 @@
 {
   "name": "fastify-lm",
   "version": "1.1.0",
-  "description": "A Fastify plugin for integrating multiple LLMs (Large Language Models)",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsup src/index.ts --dts",
-    "prepublishOnly": "npm run build",
-    "test": "vitest",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
-    "publish": "npm publish --access public"
+  "description": "A Fastify plugin for integrating multiple Language Models (LM)",
+  "homepage": "https://github.com/galiprandi/fastify-lm#readme",
+  "author": {
+    "name": "Germán Aliprandi",
+    "url": "https://github.com/galiprandi"
   },
+  "type": "module",
+  "main": "index.js",
+  "types": "src/index.d.ts",
   "keywords": [
     "fastify",
+    "language-model",
     "llm",
     "ai",
     "openai",
     "gemini",
-    "deepseek"
+    "deepseek",
+    "chatgpt",
+    "claude"
   ],
-  "author": "Germán Aliprandi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/galiprandi/fastify-lm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/galiprandi/fastify-lm/issues"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --dts",
+    "prepublishOnly": "npm run build",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "test": "npm run test:unit",
+    "test:unit": "node --test",
+    "test:coverage": "c8 node --test && c8 report --reporter=html",
+    "test:unit:verbose": "npm run test:unit -- -Rspec",
+    "publish": "npm publish --access public"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.0.0",
