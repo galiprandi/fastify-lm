@@ -15,6 +15,7 @@ fastify-lm is a [Fastify](https://www.fastify.io/) plugin that integrates multip
 
 | Provider | Description                |
 | -------- | -------------------------- |
+| Test     | Test provider              |
 | OpenAI   | OpenAI's GPT models        |
 | Google   | Google's language models   |
 | Claude   | Anthropic's language model |
