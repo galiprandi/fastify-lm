@@ -6,6 +6,7 @@
 
 | Provider  | Description                          |
 |-----------|--------------------------------------|
+| **Test**  | Test provider, always returns "test" and the input parameters |
 | **OpenAI**  | GPT models, including GPT-4o, GPT-3.5 |
 | **Google**  | Gemini models, such as Gemini 1.5  |
 | **Claude**  | Anthropic’s Claude models (Claude 3, etc.) |
