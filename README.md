@@ -122,7 +122,7 @@ curl http://localhost:3000/
 
 Register the plugin in your Fastify instance by specifying the models and providers to use.
 
-#### Single Provider
+#### Basic Usage
 
 ```typescript
 import Fastify from "fastify";
@@ -141,60 +141,14 @@ app.register(lmPlugin, {
   ],
 });
 
-const response = await app.lm.ask("How are you?");
-```
-
-💡 _Change the environment variables to switch the provider._
-
-#### Multiple Providers
-
-```typescript
-import Fastify from "fastify";
-import lmPlugin from "fastify-lm";
-
-// Create a Fastify instance and register the plugin
-const app = Fastify();
-app.register(lmPlugin, {
-  models: [
-    {
-      name: "openai",
-      provider: "openai",
-      model: "gpt-3.5-turbo",
-      apiKey: process.env.OPENAI_API_KEY,
-    },
-    {
-      name: "google",
-      provider: "google",
-      model: "gemini-2.0-flash-lite",
-      apiKey: process.env.GOOGLE_API_KEY,
-    },
-    {
-      name: "claude",
-      provider: "claude",
-      model: "claude-3-5-sonnet-20240620",
-      apiKey: process.env.CLAUDE_API_KEY,
-    },
-    {
-      name: "deepseek",
-      provider: "deepseek",
-      model: "deepseek-chat",
-      apiKey: process.env.DEEPSEEK_API_KEY,
-    },
-    {
-      name: "mistral",
-      provider: "mistral",
-      model: "mistral-medium",
-      apiKey: process.env.MISTRAL_API_KEY,
-    },
-  ],
-});
-
-const response = await app.openai.chat({
+const response = await app.lm.chat({
   messages: [{ role: "user", content: "How are you?" }],
 });
 ```
 
-#### Dynamic Query to Multiple Providers
+💡 _Change the environment variables to switch the provider._
+
+#### Multiple Providers with Query Parameter Selection
 
 ```typescript
 import Fastify, { FastifyRequest, FastifyReply } from "fastify";
@@ -237,33 +191,36 @@ app.register(lmPlugin, {
   ],
 });
 
-// Route that receives the query and model via parameters and returns the model's response
-app.get<{ Querystring: AskQuery }>(
-  "/ask",
+// Route that receives the query and optional model parameter
+app.get<{ Querystring: QueryParams }>(
+  "/chat",
+  {
+    schema: {
+      querystring: {
+        type: 'object',
+        required: ['query'],
+        properties: {
+          query: { type: 'string' },
+          model: { 
+            type: 'string', 
+            enum: ['openai', 'google', 'claude', 'deepseek', 'mistral'],
+            default: 'openai'
+          }
+        }
+      }
+    }
+  },
   async (
-    request: FastifyRequest<{ Querystring: AskQuery }>,
+    request: FastifyRequest<{ Querystring: QueryParams }>,
     reply: FastifyReply
   ) => {
-    const { query, model } = request.query;
-
-    // Check if the provider exists in the Fastify instance
-    if (!app.hasDecorator(model)) {
-      reply.status(400).send({ error: "Unsupported provider" });
-      return;
-    }
+    const { query, model = "openai" } = request.query;
 
     try {
-      let response;
-      // If the chat method exists, use it; otherwise, use ask
-      if (typeof app[model].chat === "function") {
-        response = await app[model].chat({
-          messages: [{ role: "user", content: query }],
-        });
-      } else if (typeof app[model].ask === "function") {
-        response = await app[model].ask(query);
-      } else {
-        throw new Error("The provider does not implement a suitable method");
-      }
+      const response = await app[model].chat({
+        messages: [{ role: "user", content: query }],
+      });
+      
       return { response };
     } catch (error: any) {
       reply.status(500).send({ error: error.message });
@@ -280,13 +237,13 @@ app.listen({ port: 3000 }, (err, address) => {
   console.log(`Server running at ${address}`);
 });
 
-interface AskQuery {
+interface QueryParams {
   query: string;
-  model: "openai" | "google" | "claude" | "deepseek" | "mistral"; // Extendable based on the registered providers
+  model?: "openai" | "google" | "claude" | "deepseek" | "mistral"; // Optional, defaults to "openai"
 }
 ```
 
-  ## Advanced Use Cases
+## Advanced Use Cases
 
 Beyond simple model queries, you can leverage `fastify-lm` for more advanced functionalities:
 
