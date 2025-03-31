@@ -13,15 +13,17 @@ export class OpenAIAdapter extends BaseLMAdapter {
 
   chat: LM.Adapter['chat'] = async (params) => {
     try {
-      const { system, messages } = params
+      let { messages } = params
+      if (!messages) return null
       const url = `${this.baseURL}/chat/completions`
       const headers = {
         Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
       }
+      if (params.system) messages = [{ role: 'system', content: params.system }, ...messages]
       const body = {
         model: this.model,
-        messages: [{ role: 'system', content: system }, ...messages],
+        messages,
       }
       const { data } = await axios.post<ChatResponse>(url, body, { headers })
       return data.choices?.[0]?.message?.content ?? null

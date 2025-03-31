@@ -13,17 +13,18 @@ export class ClaudeAdapter extends BaseLMAdapter {
 
   chat: LM.Adapter['chat'] = async (params) => {
     try {
-      const { system, messages } = params
+      let { messages } = params
+      if (!messages) return null
       const url = `${this.baseURL}/messages`
       const headers = {
         'x-api-key': this.apiKey,
         'anthropic-version': '2023-06-01',
         'Content-Type': 'application/json',
       }
+      if (params.system) messages = [{ role: 'system', content: params.system }, ...messages]
       const body = {
         model: this.model,
         max_tokens: 512,
-        system,
         messages,
       }
       const { data } = await axios.post<ChatResponse>(url, body, { headers })

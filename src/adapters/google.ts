@@ -13,13 +13,14 @@ export class GoogleGeminiAdapter extends BaseLMAdapter {
 
   chat:LM.Adapter['chat'] = async (params) => {
     try {
-      const { system, messages } = params
+      let { messages } = params
+      if (!messages) return null
       const url = `${this.baseURL}/${this.model}:generateContent?key=${this.apiKey}`
+      if (params.system) messages = [{ role: 'system', content: params.system }, ...messages]
       const body = {
         contents: [
           {
             parts: [
-              system ? { text: system } : undefined,
               ...messages.map(({ content: text }) => ({ text })),
             ],
           },

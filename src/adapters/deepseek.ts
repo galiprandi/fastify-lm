@@ -19,12 +19,11 @@ export class DeepSeekAdapter extends BaseLMAdapter {
 
   chat: LM.Adapter['chat'] = async (params) => {
     try {
-      let { system, messages } = params
+      let { messages } = params
       if (!messages) return null
-
       const url = `${this.baseURL}/chat/completions`
       const headers = this.getHeaders()
-      if (system) messages = [{ role: 'system', content: system }, ...messages]
+      if (params.system) messages = [{ role: 'system', content: params.system }, ...messages]
       const body = {
         model: this.model,
         messages,
