@@ -53,8 +53,10 @@ describe('ClaudeAdapter', () => {
         {
           model,
           max_tokens: 512,
-          system: 'You are a helpful assistant',
-          messages: [{ role: 'user', content: 'Hello' }]
+          messages: [
+            { role: 'system', content: 'You are a helpful assistant' },
+            { role: 'user', content: 'Hello' }
+          ]
         },
         {
           headers: {
