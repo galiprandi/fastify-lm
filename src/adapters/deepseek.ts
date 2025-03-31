@@ -19,12 +19,15 @@ export class DeepSeekAdapter extends BaseLMAdapter {
 
   chat: LM.Adapter['chat'] = async (params) => {
     try {
-      const { system, messages } = params
+      let { system, messages } = params
+      if (!messages) return null
+
       const url = `${this.baseURL}/chat/completions`
       const headers = this.getHeaders()
+      if (system) messages = [{ role: 'system', content: system }, ...messages]
       const body = {
         model: this.model,
-        messages: [system ? { role: 'system', content: system } : undefined, ...messages],
+        messages,
       }
       const { data } = await axios.post<ChatResponse>(url, body, {
         headers,
