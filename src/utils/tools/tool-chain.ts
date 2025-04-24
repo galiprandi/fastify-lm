@@ -15,7 +15,7 @@ export async function runToolChain<TResponse, TToolCall>(
   options: ToolChainOptions<TResponse, TToolCall>,
 ): Promise<string | null> {
   const {
-    maxIterations = 3,
+    maxToolIterations = 10,
     toolMap,
     makeRequest,
     extractToolCalls,
@@ -28,7 +28,7 @@ export async function runToolChain<TResponse, TToolCall>(
 
   const chatMessages: LM.ChatMessage[] = [...initialMessages]
   let result: string | null = null
-  let iterations = maxIterations
+  let iterations = maxToolIterations
 
   // Ajv instance (singleton per module)
   const ajv = new Ajv()
@@ -81,7 +81,7 @@ export async function runToolChain<TResponse, TToolCall>(
  * Allows adapters (OpenAI, Mistral, etc) to delegate tool-call orchestration here.
  */
 export interface ToolChainOptions<TResponse, TToolCall> {
-  maxIterations?: number
+  maxToolIterations?: number
   toolMap: Record<string, LM.Tool<unknown, unknown>>
   makeRequest: (messages: LM.ChatMessage[]) => Promise<TResponse>
   extractToolCalls: (response: TResponse) => TToolCall[] | undefined

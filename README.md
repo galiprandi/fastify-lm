@@ -13,7 +13,7 @@
 | **Claude**   | Anthropic’s Claude models (Claude 3, etc.)  |  ✅  |   ✅   |  ✅ |
 | **Deepseek** | Deepseek AI language models                 |  ✅  |   ✅   |  ✅ |
 | **Llama**    | Llama AI language models                    |  ✅  |   ✅   |  🚧  |
-| **Mistral**  | Mistral AI language models                  |  ✅  |   ✅   |  🚧  |
+| **Mistral**  | Mistral AI language models                  |  ✅  |   ✅   |  ✅  |
 | **Test**     | Test provider, always returns "test" and the input parameters. |  ✅  |   ✅   |  ✅  |
 
 It provides a **unified interface**, allowing you to switch providers without modifying your application code.

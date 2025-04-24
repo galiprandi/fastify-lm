@@ -9,6 +9,7 @@ export namespace LM {
     openai?: {
       organization?: string // OpenAI organization ID
       baseURL?: string // Custom API endpoint
+      maxToolIterations?: number // Max tool-call iterations for tools
     }
     google?: {
       projectId?: string // Google Cloud project ID
