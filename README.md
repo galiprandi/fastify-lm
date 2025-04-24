@@ -4,15 +4,15 @@
 
 `fastify-lm` is a **Fastify plugin** that simplifies integration with multiple **language model (LM) providers**, such as:  
 
-| Provider  | Description                          |
-|-----------|--------------------------------------|
-| **Test**  | Test provider, always returns "test" and the input parameters |
-| **OpenAI**  | GPT models, including GPT-4o, GPT-3.5 |
-| **Google**  | Gemini models, such as Gemini 1.5  |
-| **Claude**  | Anthropic’s Claude models (Claude 3, etc.) |
-| **Deepseek** | Deepseek AI language models        |
-| **Llama** | Llama AI language models            |
-| **Mistral** | Mistral AI language models         |
+| Provider   | Description                                 | Chat | Models | Tools |
+|------------|---------------------------------------------|:----:|:------:|:-----:|
+| **OpenAI**   | GPT models, including GPT-4o, GPT-3.5        |  ✅  |   ✅   |  ✅  |
+| **Google**   | Gemini models, such as Gemini 1.5           |  ✅  |   ✅   |  🚧  |
+| **Claude**   | Anthropic’s Claude models (Claude 3, etc.)  |  ✅  |   ✅   |  🚧  |
+| **Deepseek** | Deepseek AI language models                 |  ✅  |   ✅   |  🚧  |
+| **Llama**    | Llama AI language models                    |  ✅  |   ✅   |  🚧  |
+| **Mistral**  | Mistral AI language models                  |  ✅  |   ✅   |  🚧  |
+| **Test**     | Test provider, always returns "test" and the input parameters. Útil solo para pruebas internas, no genera respuestas reales. |  ✅  |   ✅   |  ✅  |
 
 It provides a **unified interface**, allowing you to switch providers without modifying your application code.  
 
@@ -81,15 +81,22 @@ fastify.register(LmPlugin, {
       name: "lm", // the name of the model instance on your app
       provider: "openai", // openai, google, claude, deepseek or any available provider
       model: "gpt-4o-mini",
-      apiKey: "your-api-key",
+      apiKey: "your-api-key", // ⚠️ Replace this with your real provider API key
     },
   ],
 });
 
-// Declare a route / that returns the models
-fastify.get("/", async function handler(request, reply) {
+// Route to get available models
+fastify.get("/models", async function handler(request, reply) {
   const models = await fastify.lm.models();
   return { models };
+});
+
+// Route to query the model (chat)
+fastify.post("/chat", async function handler(request, reply) {
+  const { messages } = request.body;
+  const response = await fastify.lm.chat({ messages });
+  return { response };
 });
 
 // Run the server!
@@ -282,6 +289,10 @@ Translate user input dynamically with multi-provider support.
 ### 📊 AI-Powered Data Extraction
 Extract structured information from unstructured text, such as invoices, legal documents, or reports.  
 [📖 Read the full guide →](docs/data-extraction.md)
+
+### 📅 Automated Meeting Scheduling with Tool-Calling
+Let your AI agent schedule meetings directly in your users' calendars by leveraging tool-calling.  
+[📖 Read the full guide →](docs/meeting-scheduler.md)
 
 🚀 **Check out more examples in the [`/docs/`](docs/) folder!**
 
