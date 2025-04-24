@@ -3,6 +3,7 @@ import type { LM } from '../lm-namespace.js'
 import { handleRequestError } from '../utils.js'
 import { BaseLMAdapter } from '../base-adapter.js'
 import { toolAdapter } from '../utils/openai/tools.js'
+import { runToolChain } from '../utils/tools/tool-chain.js'
 
 export class OpenAIAdapter extends BaseLMAdapter {
   private baseURL: string
@@ -25,59 +26,37 @@ export class OpenAIAdapter extends BaseLMAdapter {
       if (params.system) messages = [{ role: 'system', content: params.system }, ...messages]
       const toolMap: Record<string, LM.Tool<unknown, unknown>> = tools || {}
       const openAITools = tools ? toolAdapter(tools) : undefined
-      const chatMessages: LM.ChatMessage[] = messages
-      let result: string | null = null
-      let maxIterations = 3 // Prevent infinite loops
-      while (maxIterations-- > 0) {
-        const body = {
-          model: this.model,
-          messages: chatMessages,
-          tools: openAITools,
-        }
-        const response = await axios.post<ChatResponse>(url, body, { headers })
-        const choice = response.data.choices?.[0]?.message
-
-        // Multi-step tool-calling: keep looping while there are tool_calls
-        if (choice?.tool_calls) {
-          console.log(
-            'Tool calls detected:',
-            choice.tool_calls.map((tc) => ({ name: tc.function.name, args: tc.function.arguments })),
-          )
-          // Push the assistant message with tool_calls first
-          chatMessages.push({
-            role: 'assistant',
-            content: undefined,
-            tool_calls: choice.tool_calls,
-          })
-          // Then push each tool message in order
-          for (const toolCall of choice.tool_calls) {
-            const toolName = toolCall.function.name
-            const args = JSON.parse(toolCall.function.arguments)
-            const toolFn = toolMap[toolName]
-            let toolResult: string = ''
-            if (toolFn && typeof toolFn.execute === 'function') {
-              console.log(`[DEBUG] Executing tool: ${toolName} with args:`, args)
-              toolResult = String(await toolFn.execute(args))
-            } else {
-              console.log(`[DEBUG] Tool function not implemented or not found: ${toolName}`)
-              toolResult = `Tool '${toolName}' not implemented.`
-            }
-            chatMessages.push({
-              role: 'tool',
-              tool_call_id: toolCall.id,
-              name: toolName,
-              content: toolResult,
-            })
+      // Delegate multi-step tool chaining to runToolChain
+      return runToolChain(messages, {
+        toolMap,
+        maxIterations: 3,
+        makeRequest: async (chatMessages) => {
+          const body = { model: this.model, messages: chatMessages, tools: openAITools }
+          const response = await axios.post<ChatResponse>(url, body, { headers })
+          return response.data
+        },
+        extractToolCalls: (data) => data.choices?.[0]?.message?.tool_calls,
+        extractContent: (data) => data.choices?.[0]?.message?.content ?? null,
+        buildAssistantMessage: (toolCalls) => ({
+          role: 'assistant',
+          content: undefined,
+          tool_calls: toolCalls,
+        }),
+        buildToolMessage: (toolCall, toolResult) => ({
+          role: 'tool',
+          tool_call_id: toolCall.id,
+          name: toolCall.function.name,
+          content: toolResult,
+        }),
+        getToolName: (toolCall) => toolCall.function.name,
+        getToolArgs: (toolCall) => {
+          try {
+            return JSON.parse(toolCall.function.arguments)
+          } catch {
+            return {}
           }
-          // Continue to next iteration to allow model to process tool results
-          continue
-        }
-
-        // If no tool_calls, break and return result
-        result = choice?.content ?? null
-        break
-      }
-      return result
+        },
+      })
     } catch (error) {
       return handleRequestError('Error in OpenAIAdapter.chat:', error)
     }

@@ -50,10 +50,16 @@ export namespace LM {
   }
 
   // Represents a callable Tool for LLMs.
-  export interface Tool<TArgs = unknown, TResult = unknown> {
+  export interface Tool<TArgs = Record<string, unknown>, TResult = unknown> {
     description?: string
-    parameters: object
-    execute?: (args: TArgs) => Promise<TResult>
+    parameters: {
+      type: 'object'
+      properties: Record<string, unknown>
+      required: string[]
+      additionalProperties: boolean
+      [key: string]: unknown // allow for JSON Schema extensions
+    }
+    execute: (args: TArgs) => Promise<TResult>
   }
 
   // A collection of tools, indexed by tool name.
