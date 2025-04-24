@@ -1,41 +1,44 @@
-# fastify-lm  
+# fastify-lm
 
-## What is fastify-lm?  
+## What is fastify-lm?
 
-`fastify-lm` is a **Fastify plugin** that simplifies integration with multiple **language model (LM) providers**, such as:  
+`fastify-lm` is a **Fastify plugin** that simplifies integration with multiple **language model (LM) providers**, such as:
 
 | Provider   | Description                                 | Chat | Models | Tools |
 |------------|---------------------------------------------|:----:|:------:|:-----:|
 | **OpenAI**   | GPT models, including GPT-4o, GPT-3.5        |  ✅  |   ✅   |  ✅  |
 | **Google**   | Gemini models, such as Gemini 1.5           |  ✅  |   ✅   |  🚧  |
-| **Claude**   | Anthropic’s Claude models (Claude 3, etc.)  |  ✅  |   ✅   |  🚧  |
+| **Claude**   | Anthropic’s Claude models (Claude 3, etc.)  |  ✅  |   ✅   |  ✅ |
 | **Deepseek** | Deepseek AI language models                 |  ✅  |   ✅   |  🚧  |
 | **Llama**    | Llama AI language models                    |  ✅  |   ✅   |  🚧  |
 | **Mistral**  | Mistral AI language models                  |  ✅  |   ✅   |  🚧  |
-| **Test**     | Test provider, always returns "test" and the input parameters. Útil solo para pruebas internas, no genera respuestas reales. |  ✅  |   ✅   |  ✅  |
+| **Test**     | Test provider, always returns "test" and the input parameters. |  ✅  |   ✅   |  ✅  |
 
-It provides a **unified interface**, allowing you to switch providers without modifying your application code.  
+It provides a **unified interface**, allowing you to switch providers without modifying your application code.
 
-### 🔥 **Why use fastify-lm?**  
-Developing applications that interact with language models usually requires direct API integration, which can lead to:  
-- 🔗 **Dependency on a single provider**  
-- 🔄 **Difficulty switching models without refactoring code**  
-- ❌ **Inconsistencies in how different APIs are used**  
+### 🔥 **Why use fastify-lm?**
 
-With `fastify-lm`, you can:  
-✅ Define multiple providers in a single configuration  
-✅ Switch models just by changing environment variables  
-✅ Use a **consistent query system** without worrying about API differences  
-✅ Easily run A/B tests with different models to find the best fit for your use case  
+Developing applications that interact with language models usually requires direct API integration, which can lead to:
 
-### 🛠 **Use Cases**  
-- **Chatbots and virtual assistants**: Seamlessly integrate multiple AI models to enhance user experience.  
-- **Natural Language Processing (NLP)**: Analyze text using different models without modifying your code.  
-- **Model comparison**: Evaluate different LMs within the same application with minimal changes.  
-- **Flexible infrastructure**: Switch providers based on availability, cost, or technological improvements.
-- **Analyze requests**: Moderate or analyze requests using language models.
+* 🔗 **Dependency on a single provider**
+* 🔄 **Difficulty switching models without refactoring code**
+* ❌ **Inconsistencies in how different APIs are used**
 
-🚀 **Ready to get started?** Continue with the installation guide and start using `fastify-lm` in just a few minutes.  
+With `fastify-lm`, you can:\
+✅ Define multiple providers in a single configuration\
+✅ Switch models just by changing environment variables\
+✅ Use a **consistent query system** without worrying about API differences\
+✅ Easily run A/B tests with different models to find the best fit for your use case
+
+### 🛠 **Use Cases**
+
+* **Chatbots and virtual assistants**: Seamlessly integrate multiple AI models to enhance user experience.
+* **Natural Language Processing (NLP)**: Analyze text using different models without modifying your code.
+* **Model comparison**: Evaluate different LMs within the same application with minimal changes.
+* **Flexible infrastructure**: Switch providers based on availability, cost, or technological improvements.
+* **Analyze requests**: Moderate or analyze requests using language models.
+
+🚀 **Ready to get started?** Continue with the installation guide and start using `fastify-lm` in just a few minutes.
 
 ## Installation
 
@@ -153,7 +156,7 @@ const response = await app.lm.chat({
 });
 ```
 
-💡 _Change the environment variables to switch the provider._
+💡 *Change the environment variables to switch the provider.*
 
 #### Multiple Providers with Query Parameter Selection
 
@@ -255,48 +258,56 @@ interface QueryParams {
 Beyond simple model queries, you can leverage `fastify-lm` for more advanced functionalities:
 
 ### 🤖 Automated Customer Support Responses
-Use AI to generate instant answers for common support queries.  
+
+Use AI to generate instant answers for common support queries.\
 [📖 Read the full guide →](docs/support-bot.md)
 
 ### 🎫 AI-Powered Support Ticket Prioritization
-Automatically classify and prioritize support tickets based on urgency and sentiment.  
+
+Automatically classify and prioritize support tickets based on urgency and sentiment.\
 [📖 Read the full guide →](docs/support-ticket-prioritization.md)
 
 ### 📢 AI-Driven Sentiment Analysis
-Analyze user feedback, reviews, or messages to determine sentiment trends.  
+
+Analyze user feedback, reviews, or messages to determine sentiment trends.\
 [📖 Read the full guide →](docs/sentiment-analysis.md)
 
 ### 📌 Automatic Content Moderation
-Detect and block inappropriate messages before processing them.  
+
+Detect and block inappropriate messages before processing them.\
 [📖 Read the full guide →](docs/content-moderation.md)
 
 ### 🔍 Semantic Search & Query Expansion
-Improve search relevance by understanding intent and expanding queries intelligently.  
+
+Improve search relevance by understanding intent and expanding queries intelligently.\
 [📖 Read the full guide →](docs/semantic-search.md)
 
 ### ✨ Smart Autocomplete for Forms
-Enhance user input by automatically generating text suggestions.  
+
+Enhance user input by automatically generating text suggestions.\
 [📖 Read the full guide →](docs/autocomplete.md)
 
 ### 📄 Automatic Text Summarization
-Summarize long text passages using AI models.  
+
+Summarize long text passages using AI models.\
 [📖 Read the full guide →](docs/summarizer.md)
 
 ### 🌍 Real-Time Text Translation
-Translate user input dynamically with multi-provider support.  
+
+Translate user input dynamically with multi-provider support.\
 [📖 Read the full guide →](docs/translator.md)
 
 ### 📊 AI-Powered Data Extraction
-Extract structured information from unstructured text, such as invoices, legal documents, or reports.  
+
+Extract structured information from unstructured text, such as invoices, legal documents, or reports.\
 [📖 Read the full guide →](docs/data-extraction.md)
 
 ### 📅 Automated Meeting Scheduling with Tool-Calling
-Let your AI agent schedule meetings directly in your users' calendars by leveraging tool-calling.  
+
+Let your AI agent schedule meetings directly in your users' calendars by leveraging tool-calling.\
 [📖 Read the full guide →](docs/meeting-scheduler.md)
 
 🚀 **Check out more examples in the [`/docs/`](docs/) folder!**
-
-
 
 ## Contributing
 
