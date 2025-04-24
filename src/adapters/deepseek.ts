@@ -11,9 +11,10 @@ export class DeepSeekAdapter extends BaseLMAdapter {
     this.baseURL = options?.baseURL || 'https://api.deepseek.com'
   }
 
-  private getHeaders() {
+  private getHeaders(): Record<string, string> {
     return {
       Authorization: `Bearer ${this.apiKey}`,
+      'Content-Type': 'application/json',
     }
   }
 

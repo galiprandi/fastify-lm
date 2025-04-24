@@ -11,16 +11,20 @@ export class ClaudeAdapter extends BaseLMAdapter {
     this.baseURL = options?.baseURL || 'https://api.anthropic.com/v1'
   }
 
+  private getHeaders(): Record<string, string> {
+    return {
+      'x-api-key': this.apiKey,
+      'anthropic-version': '2023-06-01',
+      'Content-Type': 'application/json',
+    }
+  }
+
   chat: LM.Adapter['chat'] = async (params) => {
     try {
       let { messages } = params
       if (!messages) return null
       const url = `${this.baseURL}/messages`
-      const headers = {
-        'x-api-key': this.apiKey,
-        'anthropic-version': '2023-06-01',
-        'Content-Type': 'application/json',
-      }
+      const headers = this.getHeaders()
       if (params.system) messages = [{ role: 'system', content: params.system }, ...messages]
       const body = {
         model: this.model,
@@ -37,11 +41,7 @@ export class ClaudeAdapter extends BaseLMAdapter {
   models: LM.Adapter['models'] = async () => {
     try {
       const url = `${this.baseURL}/models`
-      const headers = {
-        'x-api-key': this.apiKey,
-        'anthropic-version': '2023-06-01',
-        'Content-Type': 'application/json',
-      }
+      const headers = this.getHeaders()
       const { data } = await axios.get<ModelsResponse>(url, {
         headers,
       })

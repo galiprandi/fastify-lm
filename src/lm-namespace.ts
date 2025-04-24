@@ -31,23 +31,34 @@ export namespace LM {
   }
 
   // Message roles for chat interfaces
-  export type MessageRole = 'system' | 'user' | 'assistant'
+  export type MessageRole = 'system' | 'user' | 'assistant' | 'tool'
 
   // Interface for chat messages
   export interface ChatMessage {
     role: MessageRole
-    content: string
+    content?: string
+    name?: string
+    tool_call_id?: string
+    tool_calls?: unknown // OpenAI tool-calling payloads
   }
 
   // Parameters for the chat method
   export interface ChatParams {
     system?: string // System prompt to set context
     messages: ChatMessage[] // Chat history
-    temperature?: number // Controls randomness (0.0-1.0)
-    maxTokens?: number // Maximum tokens in response
-    topP?: number // Nucleus sampling parameter
-    frequencyPenalty?: number // Penalizes repeated tokens
-    presencePenalty?: number // Penalizes new tokens based on presence in prompt
+    tools?: Tools // Tools to be used by the LLM
+  }
+
+  // Represents a callable Tool for LLMs.
+  export interface Tool<TArgs = unknown, TResult = unknown> {
+    description?: string
+    parameters: object
+    execute?: (args: TArgs) => Promise<TResult>
+  }
+
+  // A collection of tools, indexed by tool name.
+  export interface Tools {
+    [toolName: string]: Tool<any, any>
   }
 
   // Base interface for LM adapters
