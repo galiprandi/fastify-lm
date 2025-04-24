@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import Fastify from 'fastify'
 import fastifyLm from './fastify-lm.js'

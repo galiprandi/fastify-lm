@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { TestAdapter } from './testAdapter.js'
 
@@ -39,7 +40,7 @@ describe('TestAdapter', () => {
 
       // Mock setTimeout to throw an error
       const originalSetTimeout = global.setTimeout
-      global.setTimeout = vi.fn().mockImplementationOnce((callback) => {
+      global.setTimeout = vi.fn().mockImplementationOnce(() => {
         throw new Error('Test error')
       }) as any
 
@@ -74,7 +75,7 @@ describe('TestAdapter', () => {
 
       // Mock setTimeout to throw an error
       const originalSetTimeout = global.setTimeout
-      global.setTimeout = vi.fn().mockImplementationOnce((callback) => {
+      global.setTimeout = vi.fn().mockImplementationOnce(() => {
         throw new Error('Test error')
       }) as any
 

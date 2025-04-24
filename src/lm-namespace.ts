@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace LM {
   // Available LM providers
   export type Providers = 'test' | 'openai' | 'google' | 'deepseek' | 'claude' | 'llama' | 'mistral'
