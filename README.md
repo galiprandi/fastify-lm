@@ -1,5 +1,7 @@
 # fastify-lm
 
+**✨ Version 2.0.0 is here! Now with Tool Usage support for OpenAI and Claude providers! ✨**
+
 ## What is fastify-lm?
 
 `fastify-lm` is a **Fastify plugin** that simplifies integration with multiple **language model (LM) providers**, such as:

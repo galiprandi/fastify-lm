@@ -1,6 +1,6 @@
 {
   "name": "fastify-lm",
-  "version": "1.4.4",
+  "version": "2.0.0",
   "description": "A Fastify plugin for integrating multiple Language Models (LM)",
   "homepage": "https://github.com/galiprandi/fastify-lm#readme",
   "author": {
