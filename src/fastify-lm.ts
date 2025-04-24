@@ -38,13 +38,9 @@ const availableAdapters: LM.AvailableAdapters = {
  * @param options - LM plugin configuration options
  * @throws {Error} If configuration is invalid or initialization fails
  */
-async function fastifyLm (fastify: FastifyInstance, options: LM.PluginOptions) {
+async function fastifyLm(fastify: FastifyInstance, options: LM.PluginOptions) {
   // Validate that models are provided
-  if (
-    !options.models ||
-    !Array.isArray(options.models) ||
-    options.models.length === 0
-  ) {
+  if (!options.models || !Array.isArray(options.models) || options.models.length === 0) {
     throw new Error('You must provide an array of models.')
   }
 
@@ -70,11 +66,7 @@ async function fastifyLm (fastify: FastifyInstance, options: LM.PluginOptions) {
 
     try {
       // Initialize the adapter with the appropriate provider-specific options
-      const instance = new availableAdapters[provider](
-        apiKey,
-        model,
-        providerOptions
-      )
+      const instance = new availableAdapters[provider](apiKey, model, providerOptions)
 
       // Register the adapter in fastify
       fastify.decorate(name, instance)
@@ -98,7 +90,7 @@ async function fastifyLm (fastify: FastifyInstance, options: LM.PluginOptions) {
  * @param config - Model configuration to validate
  * @throws {Error} If any required fields are missing
  */
-function validateModelConfig (config: LM.ModelConfig): void {
+function validateModelConfig(config: LM.ModelConfig): void {
   const { name, provider, model, apiKey } = config
 
   if (!name) {

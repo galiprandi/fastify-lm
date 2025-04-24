@@ -6,7 +6,7 @@ import { BaseLMAdapter } from '../base-adapter.js'
 export class LlamaAdapter extends BaseLMAdapter {
   private baseURL: string
 
-  constructor (apiKey: string, model: string, options?: LM.ProviderSpecificOptions['llama']) {
+  constructor(apiKey: string, model: string, options?: LM.ProviderSpecificOptions['llama']) {
     super(apiKey, model)
     this.baseURL = options?.baseURL || 'https://api.llama-api.com'
   }
@@ -33,12 +33,14 @@ export class LlamaAdapter extends BaseLMAdapter {
   }
 
   models: LM.Adapter['models'] = async () => {
-    console.info('⛔ The model list is not available for LlamaAdapter. Please check the documentation at https://docs.llama-api.com/quickstart#available-models.')
+    console.info(
+      '⛔ The model list is not available for LlamaAdapter. Please check the documentation at https://docs.llama-api.com/quickstart#available-models.',
+    )
     return []
   }
 }
 
 // Interfaces
 interface ChatResponse {
-  choices?: { message?: { content: string } }[];
+  choices?: { message?: { content: string } }[]
 }

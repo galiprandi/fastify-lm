@@ -6,7 +6,7 @@ import { BaseLMAdapter } from '../base-adapter.js'
 export class ClaudeAdapter extends BaseLMAdapter {
   private baseURL: string
 
-  constructor (apiKey: string, model: string, options?: LM.ProviderSpecificOptions['claude']) {
+  constructor(apiKey: string, model: string, options?: LM.ProviderSpecificOptions['claude']) {
     super(apiKey, model, options)
     this.baseURL = options?.baseURL || 'https://api.anthropic.com/v1'
   }
@@ -56,19 +56,19 @@ export class ClaudeAdapter extends BaseLMAdapter {
 // Interfaces
 interface ChatResponse {
   content?: {
-    type: string;
-    text: string;
-  }[];
+    type: string
+    text: string
+  }[]
 }
 
 type ModelsResponse = {
   data: Array<{
-    type: string;
-    id: string;
-    display_name: string;
-    created_at: string;
-  }>;
-  has_more: boolean;
-  first_id: string;
-  last_id: string;
+    type: string
+    id: string
+    display_name: string
+    created_at: string
+  }>
+  has_more: boolean
+  first_id: string
+  last_id: string
 }

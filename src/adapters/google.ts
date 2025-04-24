@@ -6,12 +6,12 @@ import { BaseLMAdapter } from '../base-adapter.js'
 export class GoogleGeminiAdapter extends BaseLMAdapter {
   private baseURL: string
 
-  constructor (apiKey: string, model: string, options?: LM.ProviderSpecificOptions['google']) {
+  constructor(apiKey: string, model: string, options?: LM.ProviderSpecificOptions['google']) {
     super(apiKey, model, options)
     this.baseURL = 'https://generativelanguage.googleapis.com/v1beta/models'
   }
 
-  chat:LM.Adapter['chat'] = async (params) => {
+  chat: LM.Adapter['chat'] = async (params) => {
     try {
       let { messages } = params
       if (!messages) return null
@@ -20,9 +20,7 @@ export class GoogleGeminiAdapter extends BaseLMAdapter {
       const body = {
         contents: [
           {
-            parts: [
-              ...messages.map(({ content: text }) => ({ text })),
-            ],
+            parts: [...messages.map(({ content: text }) => ({ text }))],
           },
         ],
       }
@@ -33,7 +31,7 @@ export class GoogleGeminiAdapter extends BaseLMAdapter {
     }
   }
 
-  models:LM.Adapter['models'] = async () => {
+  models: LM.Adapter['models'] = async () => {
     try {
       const url = `${this.baseURL}?key=${this.apiKey}`
       const { data } = await axios.get<ModelsResponse>(url)
@@ -49,11 +47,11 @@ export class GoogleGeminiAdapter extends BaseLMAdapter {
 interface ChatResponse {
   candidates?: {
     content?: {
-      parts?: { text: string }[];
-    };
-  }[];
+      parts?: { text: string }[]
+    }
+  }[]
 }
 
 interface ModelsResponse {
-  models?: { name: string }[];
+  models?: { name: string }[]
 }

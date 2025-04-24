@@ -34,16 +34,16 @@ describe('LlamaAdapter', () => {
           choices: [
             {
               message: {
-                content: 'Test response'
-              }
-            }
-          ]
-        }
+                content: 'Test response',
+              },
+            },
+          ],
+        },
       })
 
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       const response = await adapter.chat(params)
@@ -59,27 +59,27 @@ describe('LlamaAdapter', () => {
           model,
           messages: [
             { role: 'system', content: 'You are a helpful assistant' },
-            { role: 'user', content: 'Hello' }
-          ]
+            { role: 'user', content: 'Hello' },
+          ],
         },
         {
           headers: {
             Authorization: `Bearer ${apiKey}`,
-            'Content-Type': 'application/json'
-          }
-        }
+            'Content-Type': 'application/json',
+          },
+        },
       )
     })
 
     it('should return null when the API response is missing expected data', async () => {
       // Mock response with missing data
       mockAxios.post.mockResolvedValueOnce({
-        data: { choices: [] }
+        data: { choices: [] },
       })
 
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       const response = await adapter.chat(params)
@@ -93,7 +93,7 @@ describe('LlamaAdapter', () => {
 
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       const response = await adapter.chat(params)
@@ -113,7 +113,7 @@ describe('LlamaAdapter', () => {
 
       // Verificar que se muestra el mensaje informativo
       expect(consoleInfoSpy).toHaveBeenCalledWith(
-        '⛔ The model list is not available for LlamaAdapter. Please check the documentation at https://docs.llama-api.com/quickstart#available-models.'
+        '⛔ The model list is not available for LlamaAdapter. Please check the documentation at https://docs.llama-api.com/quickstart#available-models.',
       )
 
       // Verificar que no se hace ninguna llamada a axios.get

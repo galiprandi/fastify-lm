@@ -6,7 +6,7 @@ import { BaseLMAdapter } from '../base-adapter.js'
 export class OpenAIAdapter extends BaseLMAdapter {
   private baseURL: string
 
-  constructor (apiKey: string, model: string, options?: LM.ProviderSpecificOptions['openai']) {
+  constructor(apiKey: string, model: string, options?: LM.ProviderSpecificOptions['openai']) {
     super(apiKey, model, options)
     this.baseURL = options?.baseURL || 'https://api.openai.com/v1'
   }
@@ -32,7 +32,7 @@ export class OpenAIAdapter extends BaseLMAdapter {
     }
   }
 
-  models:LM.Adapter['models'] = async () => {
+  models: LM.Adapter['models'] = async () => {
     try {
       const url = `${this.baseURL}/models`
       const headers = {
@@ -50,9 +50,9 @@ export class OpenAIAdapter extends BaseLMAdapter {
 
 // Interfaces
 interface ChatResponse {
-  choices?: { message?: { content: string } }[];
+  choices?: { message?: { content: string } }[]
 }
 
 interface ModelsResponse {
-  data?: { id: string }[];
+  data?: { id: string }[]
 }

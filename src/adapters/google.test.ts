@@ -31,19 +31,17 @@ describe('GoogleGeminiAdapter', () => {
     it('should make a POST request to the Google Gemini API endpoint', async () => {
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       const mockResponse = {
         candidates: [
           {
             content: {
-              parts: [
-                { text: 'Hello! How can I help you today?' }
-              ]
-            }
-          }
-        ]
+              parts: [{ text: 'Hello! How can I help you today?' }],
+            },
+          },
+        ],
       }
 
       mockAxios.post.mockResolvedValueOnce({ data: mockResponse })
@@ -56,13 +54,10 @@ describe('GoogleGeminiAdapter', () => {
         {
           contents: [
             {
-              parts: [
-                { text: 'You are a helpful assistant' },
-                { text: 'Hello' },
-              ]
-            }
-          ]
-        }
+              parts: [{ text: 'You are a helpful assistant' }, { text: 'Hello' }],
+            },
+          ],
+        },
       )
       expect(response).toBe('Hello! How can I help you today?')
     })
@@ -70,7 +65,7 @@ describe('GoogleGeminiAdapter', () => {
     it('should return null when the API response is missing expected data', async () => {
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       // Mock empty response
@@ -83,7 +78,7 @@ describe('GoogleGeminiAdapter', () => {
     it('should handle errors gracefully', async () => {
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       // Mock error response
@@ -97,10 +92,7 @@ describe('GoogleGeminiAdapter', () => {
   describe('models method', () => {
     it('should make a GET request to the Google Gemini models endpoint', async () => {
       const mockResponse = {
-        models: [
-          { name: 'gemini-pro' },
-          { name: 'gemini-ultra' }
-        ]
+        models: [{ name: 'gemini-pro' }, { name: 'gemini-ultra' }],
       }
 
       mockAxios.get.mockResolvedValueOnce({ data: mockResponse })
@@ -109,7 +101,7 @@ describe('GoogleGeminiAdapter', () => {
 
       expect(mockAxios.get).toHaveBeenCalledTimes(1)
       expect(mockAxios.get).toHaveBeenCalledWith(
-        `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`
+        `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`,
       )
       expect(models).toEqual(['gemini-pro', 'gemini-ultra'].sort())
     })

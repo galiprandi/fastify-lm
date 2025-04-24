@@ -22,9 +22,9 @@ describe('fastify-lm plugin', () => {
           name: 'testLm',
           provider: 'test',
           model: 'test-model',
-          apiKey: 'test-api-key'
-        }
-      ]
+          apiKey: 'test-api-key',
+        },
+      ],
     }
 
     await fastify.register(fastifyLm, options)
@@ -34,19 +34,15 @@ describe('fastify-lm plugin', () => {
   it('should throw an error if models array is missing', async () => {
     const options = {} as LM.PluginOptions
 
-    await expect(fastify.register(fastifyLm, options)).rejects.toThrow(
-      'You must provide an array of models.'
-    )
+    await expect(fastify.register(fastifyLm, options)).rejects.toThrow('You must provide an array of models.')
   })
 
   it('should throw an error if models array is empty', async () => {
     const options: LM.PluginOptions = {
-      models: []
+      models: [],
     }
 
-    await expect(fastify.register(fastifyLm, options)).rejects.toThrow(
-      'You must provide an array of models.'
-    )
+    await expect(fastify.register(fastifyLm, options)).rejects.toThrow('You must provide an array of models.')
   })
 
   it('should throw an error if model config is missing required fields', async () => {
@@ -56,12 +52,12 @@ describe('fastify-lm plugin', () => {
           name: 'testLm',
           provider: 'test',
           // Missing model and apiKey
-        } as any
-      ]
+        } as any,
+      ],
     }
 
     await expect(fastify.register(fastifyLm, options)).rejects.toThrow(
-      `Model configuration "${options.models[0].name}" is missing "model" field`
+      `Model configuration "${options.models[0].name}" is missing "model" field`,
     )
   })
 
@@ -72,13 +68,13 @@ describe('fastify-lm plugin', () => {
           name: 'testLm',
           provider: 'unsupported-provider',
           model: 'test-model',
-          apiKey: 'test-api-key'
-        } as any
-      ]
+          apiKey: 'test-api-key',
+        } as any,
+      ],
     }
 
     await expect(fastify.register(fastifyLm, options)).rejects.toThrow(
-      'Provider unsupported-provider is not supported.'
+      'Provider unsupported-provider is not supported.',
     )
   })
 
@@ -89,15 +85,15 @@ describe('fastify-lm plugin', () => {
           name: 'testLm1',
           provider: 'test',
           model: 'test-model-1',
-          apiKey: 'test-api-key-1'
+          apiKey: 'test-api-key-1',
         },
         {
           name: 'testLm2',
           provider: 'test',
           model: 'test-model-2',
-          apiKey: 'test-api-key-2'
-        }
-      ]
+          apiKey: 'test-api-key-2',
+        },
+      ],
     }
 
     await fastify.register(fastifyLm, options)

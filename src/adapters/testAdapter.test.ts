@@ -25,7 +25,7 @@ describe('TestAdapter', () => {
     it('should return a formatted string with the input parameters', async () => {
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       const response = await adapter.chat(params)
@@ -45,7 +45,7 @@ describe('TestAdapter', () => {
 
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       const response = await adapter.chat(params)

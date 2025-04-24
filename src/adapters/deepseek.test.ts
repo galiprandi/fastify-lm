@@ -31,7 +31,7 @@ describe('DeepSeekAdapter', () => {
     it('should make a POST request to the DeepSeek chat completions endpoint', async () => {
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       const mockResponse = {
@@ -39,10 +39,10 @@ describe('DeepSeekAdapter', () => {
           {
             message: {
               content: 'Hello! How can I help you today?',
-              role: 'assistant'
-            }
-          }
-        ]
+              role: 'assistant',
+            },
+          },
+        ],
       }
 
       mockAxios.post.mockResolvedValueOnce({ data: mockResponse })
@@ -56,14 +56,14 @@ describe('DeepSeekAdapter', () => {
           model,
           messages: [
             { role: 'system', content: 'You are a helpful assistant' },
-            { role: 'user', content: 'Hello' }
-          ]
+            { role: 'user', content: 'Hello' },
+          ],
         },
         {
           headers: {
-            Authorization: `Bearer ${apiKey}`
-          }
-        }
+            Authorization: `Bearer ${apiKey}`,
+          },
+        },
       )
       expect(response).toBe('Hello! How can I help you today?')
     })
@@ -71,7 +71,7 @@ describe('DeepSeekAdapter', () => {
     it('should return null when the API response is missing expected data', async () => {
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       // Mock empty response
@@ -84,7 +84,7 @@ describe('DeepSeekAdapter', () => {
     it('should handle errors gracefully', async () => {
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       // Mock error response
@@ -98,10 +98,7 @@ describe('DeepSeekAdapter', () => {
   describe('models method', () => {
     it('should make a GET request to the DeepSeek models endpoint', async () => {
       const mockResponse = {
-        data: [
-          { id: 'deepseek-chat' },
-          { id: 'deepseek-coder' }
-        ]
+        data: [{ id: 'deepseek-chat' }, { id: 'deepseek-coder' }],
       }
 
       mockAxios.get.mockResolvedValueOnce({ data: mockResponse })
@@ -109,14 +106,11 @@ describe('DeepSeekAdapter', () => {
       const models = await adapter.models()
 
       expect(mockAxios.get).toHaveBeenCalledTimes(1)
-      expect(mockAxios.get).toHaveBeenCalledWith(
-        'https://api.deepseek.com/models',
-        {
-          headers: {
-            Authorization: `Bearer ${apiKey}`
-          }
-        }
-      )
+      expect(mockAxios.get).toHaveBeenCalledWith('https://api.deepseek.com/models', {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+      })
       expect(models).toEqual(['deepseek-chat', 'deepseek-coder'].sort())
     })
 

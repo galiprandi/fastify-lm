@@ -6,12 +6,12 @@ import { BaseLMAdapter } from '../base-adapter.js'
 export class DeepSeekAdapter extends BaseLMAdapter {
   private baseURL: string
 
-  constructor (apiKey: string, model: string, options?: LM.ProviderSpecificOptions['deepseek']) {
+  constructor(apiKey: string, model: string, options?: LM.ProviderSpecificOptions['deepseek']) {
     super(apiKey, model, options)
     this.baseURL = options?.baseURL || 'https://api.deepseek.com'
   }
 
-  private getHeaders () {
+  private getHeaders() {
     return {
       Authorization: `Bearer ${this.apiKey}`,
     }
@@ -37,14 +37,11 @@ export class DeepSeekAdapter extends BaseLMAdapter {
     }
   }
 
-  models:LM.Adapter['models'] = async () => {
+  models: LM.Adapter['models'] = async () => {
     try {
       const url = `${this.baseURL}/models`
       const headers = this.getHeaders()
-      const { data } = await axios.get<ModelsResponse>(
-        url,
-        { headers }
-      )
+      const { data } = await axios.get<ModelsResponse>(url, { headers })
       const models = data.data?.map(({ id }) => id).sort() ?? []
       return models
     } catch (error) {
@@ -75,5 +72,5 @@ interface ChatResponse {
 }
 
 interface ModelsResponse {
-  data?: { id: string }[];
+  data?: { id: string }[]
 }

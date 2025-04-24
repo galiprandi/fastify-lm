@@ -31,16 +31,16 @@ describe('ClaudeAdapter', () => {
     it('should make a POST request to the Anthropic messages endpoint', async () => {
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       const mockResponse = {
         content: [
           {
             type: 'text',
-            text: 'Hello! How can I help you today?'
-          }
-        ]
+            text: 'Hello! How can I help you today?',
+          },
+        ],
       }
 
       mockAxios.post.mockResolvedValueOnce({ data: mockResponse })
@@ -55,16 +55,16 @@ describe('ClaudeAdapter', () => {
           max_tokens: 512,
           messages: [
             { role: 'system', content: 'You are a helpful assistant' },
-            { role: 'user', content: 'Hello' }
-          ]
+            { role: 'user', content: 'Hello' },
+          ],
         },
         {
           headers: {
             'x-api-key': apiKey,
             'anthropic-version': '2023-06-01',
-            'Content-Type': 'application/json'
-          }
-        }
+            'Content-Type': 'application/json',
+          },
+        },
       )
       expect(response).toBe('Hello! How can I help you today?')
     })
@@ -72,7 +72,7 @@ describe('ClaudeAdapter', () => {
     it('should return null when the API response is missing expected data', async () => {
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       // Mock empty response
@@ -85,7 +85,7 @@ describe('ClaudeAdapter', () => {
     it('should handle errors gracefully', async () => {
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       // Mock error response
@@ -99,11 +99,7 @@ describe('ClaudeAdapter', () => {
   describe('models method', () => {
     it('should make a GET request to the Anthropic models endpoint', async () => {
       const mockResponse = {
-        data: [
-          { id: 'claude-3-opus-20240229' },
-          { id: 'claude-3-sonnet-20240229' },
-          { id: 'claude-3-haiku-20240229' }
-        ]
+        data: [{ id: 'claude-3-opus-20240229' }, { id: 'claude-3-sonnet-20240229' }, { id: 'claude-3-haiku-20240229' }],
       }
 
       mockAxios.get.mockResolvedValueOnce({ data: mockResponse })
@@ -111,16 +107,13 @@ describe('ClaudeAdapter', () => {
       const models = await adapter.models()
 
       expect(mockAxios.get).toHaveBeenCalledTimes(1)
-      expect(mockAxios.get).toHaveBeenCalledWith(
-        'https://api.anthropic.com/v1/models',
-        {
-          headers: {
-            'x-api-key': apiKey,
-            'anthropic-version': '2023-06-01',
-            'Content-Type': 'application/json'
-          }
-        }
-      )
+      expect(mockAxios.get).toHaveBeenCalledWith('https://api.anthropic.com/v1/models', {
+        headers: {
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'Content-Type': 'application/json',
+        },
+      })
       expect(models).toEqual(['claude-3-haiku-20240229', 'claude-3-opus-20240229', 'claude-3-sonnet-20240229'])
     })
 

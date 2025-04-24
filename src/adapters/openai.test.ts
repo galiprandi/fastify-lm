@@ -34,16 +34,16 @@ describe('OpenAIAdapter', () => {
           choices: [
             {
               message: {
-                content: 'Test response'
-              }
-            }
-          ]
-        }
+                content: 'Test response',
+              },
+            },
+          ],
+        },
       })
 
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       const response = await adapter.chat(params)
@@ -59,27 +59,27 @@ describe('OpenAIAdapter', () => {
           model,
           messages: [
             { role: 'system', content: 'You are a helpful assistant' },
-            { role: 'user', content: 'Hello' }
-          ]
+            { role: 'user', content: 'Hello' },
+          ],
         },
         {
           headers: {
             Authorization: `Bearer ${apiKey}`,
-            'Content-Type': 'application/json'
-          }
-        }
+            'Content-Type': 'application/json',
+          },
+        },
       )
     })
 
     it('should return null when the API response is missing expected data', async () => {
       // Mock response with missing data
       mockAxios.post.mockResolvedValueOnce({
-        data: { choices: [] }
+        data: { choices: [] },
       })
 
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       const response = await adapter.chat(params)
@@ -93,7 +93,7 @@ describe('OpenAIAdapter', () => {
 
       const params = {
         system: 'You are a helpful assistant',
-        messages: [{ role: 'user' as const, content: 'Hello' }]
+        messages: [{ role: 'user' as const, content: 'Hello' }],
       }
 
       const response = await adapter.chat(params)
@@ -106,12 +106,8 @@ describe('OpenAIAdapter', () => {
       // Mock successful response
       mockAxios.get.mockResolvedValueOnce({
         data: {
-          data: [
-            { id: 'gpt-4' },
-            { id: 'gpt-3.5-turbo' },
-            { id: 'text-davinci-003' }
-          ]
-        }
+          data: [{ id: 'gpt-4' }, { id: 'gpt-3.5-turbo' }, { id: 'text-davinci-003' }],
+        },
       })
 
       const models = await adapter.models()
@@ -121,21 +117,18 @@ describe('OpenAIAdapter', () => {
 
       // Verify axios was called correctly
       expect(mockAxios.get).toHaveBeenCalledTimes(1)
-      expect(mockAxios.get).toHaveBeenCalledWith(
-        'https://api.openai.com/v1/models',
-        {
-          headers: {
-            Authorization: `Bearer ${apiKey}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      )
+      expect(mockAxios.get).toHaveBeenCalledWith('https://api.openai.com/v1/models', {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+      })
     })
 
     it('should return an empty array when the API response is missing expected data', async () => {
       // Mock response with missing data
       mockAxios.get.mockResolvedValueOnce({
-        data: {}
+        data: {},
       })
 
       const models = await adapter.models()
