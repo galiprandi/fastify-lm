@@ -11,7 +11,7 @@
 | **OpenAI**   | GPT models, including GPT-4o, GPT-3.5        |  ✅  |   ✅   |  ✅  |
 | **Google**   | Gemini models, such as Gemini 1.5           |  ✅  |   ✅   |  🚧  |
 | **Claude**   | Anthropic’s Claude models (Claude 3, etc.)  |  ✅  |   ✅   |  ✅ |
-| **Deepseek** | Deepseek AI language models                 |  ✅  |   ✅   |  🚧  |
+| **Deepseek** | Deepseek AI language models                 |  ✅  |   ✅   |  ✅ |
 | **Llama**    | Llama AI language models                    |  ✅  |   ✅   |  🚧  |
 | **Mistral**  | Mistral AI language models                  |  ✅  |   ✅   |  🚧  |
 | **Test**     | Test provider, always returns "test" and the input parameters. |  ✅  |   ✅   |  ✅  |

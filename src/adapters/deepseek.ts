@@ -2,6 +2,8 @@ import axios from 'axios'
 import type { LM } from '../lm-namespace.js'
 import { handleRequestError } from '../utils.js'
 import { BaseLMAdapter } from '../base-adapter.js'
+import { toolAdapter } from '../utils/openai/tools.js'
+import { runToolChain } from '../utils/tools/tool-chain.js'
 
 export class DeepSeekAdapter extends BaseLMAdapter {
   private baseURL: string
@@ -21,18 +23,47 @@ export class DeepSeekAdapter extends BaseLMAdapter {
   chat: LM.Adapter['chat'] = async (params) => {
     try {
       let { messages } = params
+      const { tools } = params
       if (!messages) return null
       const url = `${this.baseURL}/chat/completions`
-      const headers = this.getHeaders()
-      if (params.system) messages = [{ role: 'system', content: params.system }, ...messages]
-      const body = {
-        model: this.model,
-        messages,
+      const headers = {
+        Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
       }
-      const { data } = await axios.post<ChatResponse>(url, body, {
-        headers,
+      if (params.system) messages = [{ role: 'system', content: params.system }, ...messages]
+      const toolMap: Record<string, LM.Tool<unknown, unknown>> = tools || {}
+      const deepseekTools = tools ? toolAdapter(tools) : undefined
+
+      return runToolChain(messages, {
+        toolMap,
+        maxIterations: 3,
+        makeRequest: async (chatMessages) => {
+          const body = { model: this.model, messages: chatMessages, tools: deepseekTools }
+          const response = await axios.post<ChatResponse>(url, body, { headers })
+          return response.data
+        },
+        extractToolCalls: (data) => data.choices?.[0]?.message?.tool_calls,
+        extractContent: (data) => data.choices?.[0]?.message?.content ?? null,
+        buildAssistantMessage: (toolCalls) => ({
+          role: 'assistant',
+          content: undefined,
+          tool_calls: toolCalls,
+        }),
+        buildToolMessage: (toolCall, toolResult) => ({
+          role: 'tool',
+          tool_call_id: toolCall.id,
+          name: toolCall.function.name,
+          content: toolResult,
+        }),
+        getToolName: (toolCall) => toolCall.function.name,
+        getToolArgs: (toolCall) => {
+          try {
+            return JSON.parse(toolCall.function.arguments)
+          } catch {
+            return {}
+          }
+        },
       })
-      return data.choices?.[0]?.message?.content ?? null
     } catch (error) {
       return handleRequestError('Error in DeepSeekAdapter.chat:', error)
     }
@@ -51,25 +82,20 @@ export class DeepSeekAdapter extends BaseLMAdapter {
   }
 }
 
-// Interfaces
 interface ChatResponse {
-  id: string
-  choices: {
-    finish_reason: string
-    index: number
-    message: {
-      content: string
-      role: string
+  choices?: {
+    message?: {
+      content?: string
+      tool_calls?: Array<{
+        id: string
+        type: 'function'
+        function: {
+          name: string
+          arguments: string
+        }
+      }>
     }
   }[]
-  created: number
-  model: string
-  object: string
-  usage: {
-    completion_tokens: number
-    prompt_tokens: number
-    total_tokens: number
-  }
 }
 
 interface ModelsResponse {
