@@ -11,11 +11,18 @@ export class GoogleGeminiAdapter extends BaseLMAdapter {
     this.baseURL = 'https://generativelanguage.googleapis.com/v1beta/models'
   }
 
+  private getHeaders(): Record<string, string> {
+    return {
+      'Content-Type': 'application/json',
+    }
+  }
+
   chat: LM.Adapter['chat'] = async (params) => {
     try {
       let { messages } = params
       if (!messages) return null
       const url = `${this.baseURL}/${this.model}:generateContent?key=${this.apiKey}`
+      const headers = this.getHeaders()
       if (params.system) messages = [{ role: 'system', content: params.system }, ...messages]
       const body = {
         contents: [
@@ -24,7 +31,7 @@ export class GoogleGeminiAdapter extends BaseLMAdapter {
           },
         ],
       }
-      const { data } = await axios.post<ChatResponse>(url, body)
+      const { data } = await axios.post<ChatResponse>(url, body, { headers })
       return data.candidates?.[0]?.content?.parts?.[0]?.text ?? null
     } catch (error) {
       return handleRequestError('Error in GoogleGeminiAdapter.chat:', error)
@@ -34,7 +41,8 @@ export class GoogleGeminiAdapter extends BaseLMAdapter {
   models: LM.Adapter['models'] = async () => {
     try {
       const url = `${this.baseURL}?key=${this.apiKey}`
-      const { data } = await axios.get<ModelsResponse>(url)
+      const headers = this.getHeaders()
+      const { data } = await axios.get<ModelsResponse>(url, { headers })
       const models = data.models?.map((model) => model.name).sort() ?? []
       return models
     } catch (error) {
