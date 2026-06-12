@@ -328,6 +328,23 @@ We need a lot of hands to implement other providers you can help us by submittin
 
 [📖 Adding a New Adapter](docs/adding-new-adapter.md)
 
+## Validation & Testing
+
+To validate tool-calling functionality works correctly:
+
+```bash
+# Run integration tests
+npm run test:integration
+
+# Run demo with test adapter
+npm run demo
+
+# Run demo with real API key
+OPENAI_API_KEY=your-key npm run demo
+```
+
+See [VALIDATION.md](VALIDATION.md) for complete validation guide.
+
 ## License
 
 MIT

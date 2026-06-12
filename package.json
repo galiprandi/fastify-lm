@@ -41,10 +41,12 @@
     "lint": "eslint src/**/*.{ts,js} src/**/*.{ts,js}",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest run",
+    "test:integration": "vitest run src/integration",
     "format": "prettier --write \"src/**/*.{ts,js}\" \"*.{ts,js}\"",
     "test:dev": "vitest --watch",
     "test:coverage": "npm run test -- --coverage",
     "pretest": "echo -e \" Running tests...\"",
+    "demo": "node examples/tool-calling-demo.ts",
     "publish": "npm publish --access public"
   },
   "license": "MIT",
