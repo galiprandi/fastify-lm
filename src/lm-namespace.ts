@@ -10,6 +10,7 @@ export namespace LM {
       organization?: string // OpenAI organization ID
       baseURL?: string // Custom API endpoint
       maxToolIterations?: number // Max tool-call iterations for tools
+      toolTimeout?: number // Timeout in milliseconds for tool execution
     }
     google?: {
       projectId?: string // Google Cloud project ID
@@ -18,15 +19,18 @@ export namespace LM {
     claude?: {
       baseURL?: string // Custom API endpoint
       version?: string // Claude API version
+      toolTimeout?: number // Timeout in milliseconds for tool execution
     }
     deepseek?: {
       baseURL?: string // Custom API endpoint
+      toolTimeout?: number // Timeout in milliseconds for tool execution
     }
     llama?: {
       baseURL?: string // Custom API endpoint
     }
     mistral?: {
       baseURL?: string // Custom API endpoint
+      toolTimeout?: number // Timeout in milliseconds for tool execution
     }
     test?: Record<string, unknown> // For test adapter configuration
   }

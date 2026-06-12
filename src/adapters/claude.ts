@@ -42,9 +42,10 @@ export class ClaudeAdapter extends BaseLMAdapter {
       const toolMap: Record<string, LM.Tool<unknown, unknown>> = tools || {}
       const claudeTools = tools ? claudeToolAdapter(tools) : undefined
 
-      return runToolChain(messages, {
+      return await runToolChain(messages, {
         toolMap,
         maxIterations: 5,
+        toolTimeout: this.options?.toolTimeout,
         makeRequest: async (chatMessages) => {
           const body = {
             model: this.model,

@@ -52,11 +52,10 @@ describe('ClaudeAdapter', () => {
         'https://api.anthropic.com/v1/messages',
         {
           model,
-          max_tokens: 512,
-          messages: [
-            { role: 'system', content: 'You are a helpful assistant' },
-            { role: 'user', content: 'Hello' },
-          ],
+          max_tokens: 1024,
+          messages: [{ role: 'user', content: 'Hello' }],
+          system: 'You are a helpful assistant',
+          tools: undefined,
         },
         {
           headers: {
@@ -76,7 +75,7 @@ describe('ClaudeAdapter', () => {
       }
 
       // Mock empty response
-      mockAxios.post.mockResolvedValueOnce({ data: {} })
+      mockAxios.post.mockResolvedValueOnce({ data: { content: [] } })
 
       const response = await adapter.chat(params)
       expect(response).toBeNull()

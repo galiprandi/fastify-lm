@@ -6,6 +6,6 @@ export const handleRequestError = (msg: string, error: any) => {
     console.error(msg, error.response?.data || error.message)
   } else console.error(msg, error.message)
 
-  // Re-throw the error so the caller knows the operation failed
-  throw error
+  // Return null instead of throwing to handle errors gracefully
+  return null
 }

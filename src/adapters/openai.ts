@@ -27,9 +27,10 @@ export class OpenAIAdapter extends BaseLMAdapter {
       const toolMap: Record<string, LM.Tool<unknown, unknown>> = tools || {}
       const openAITools = tools ? toolAdapter(tools) : undefined
 
-      return runToolChain(messages, {
+      return await runToolChain(messages, {
         toolMap,
         maxToolIterations: this.options?.maxToolIterations,
+        toolTimeout: this.options?.toolTimeout,
         makeRequest: async (chatMessages) => {
           const body = { model: this.model, messages: chatMessages, tools: openAITools }
           const response = await axios.post<ChatResponse>(url, body, { headers })

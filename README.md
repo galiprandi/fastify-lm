@@ -259,6 +259,17 @@ interface QueryParams {
 
 Beyond simple model queries, you can leverage `fastify-lm` for more advanced functionalities:
 
+### 🛠️ Tool-Calling (New in v2.0.0)
+
+Enable your AI agents to interact with external systems and perform actions by calling predefined functions.
+
+- **Schedule meetings** automatically
+- **Query databases** and APIs
+- **Process files** and documents
+- **Execute business logic** dynamically
+
+[📖 Read the Tool-Calling Guide →](docs/tool-calling-guide.md)
+
 ### 🤖 Automated Customer Support Responses
 
 Use AI to generate instant answers for common support queries.\
