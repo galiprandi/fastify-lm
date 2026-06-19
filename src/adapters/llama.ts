@@ -11,15 +11,19 @@ export class LlamaAdapter extends BaseLMAdapter {
     this.baseURL = options?.baseURL || 'https://api.llama-api.com'
   }
 
+  private getHeaders(): Record<string, string> {
+    return {
+      Authorization: `Bearer ${this.apiKey}`,
+      'Content-Type': 'application/json',
+    }
+  }
+
   chat: LM.Adapter['chat'] = async (params) => {
     try {
       let { messages } = params
       if (!messages) return null
       const url = `${this.baseURL}/chat/completions`
-      const headers = {
-        Authorization: `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-      }
+      const headers = this.getHeaders()
       if (params.system) messages = [{ role: 'system', content: params.system }, ...messages]
       const body = {
         model: this.model,

@@ -1,41 +1,46 @@
-# fastify-lm  
+# fastify-lm
 
-## What is fastify-lm?  
+**✨ Version 2.0.0 is here! Now with Tool Usage support for OpenAI and Claude providers! ✨**
 
-`fastify-lm` is a **Fastify plugin** that simplifies integration with multiple **language model (LM) providers**, such as:  
+## What is fastify-lm?
 
-| Provider  | Description                          |
-|-----------|--------------------------------------|
-| **Test**  | Test provider, always returns "test" and the input parameters |
-| **OpenAI**  | GPT models, including GPT-4o, GPT-3.5 |
-| **Google**  | Gemini models, such as Gemini 1.5  |
-| **Claude**  | Anthropic’s Claude models (Claude 3, etc.) |
-| **Deepseek** | Deepseek AI language models        |
-| **Llama** | Llama AI language models            |
-| **Mistral** | Mistral AI language models         |
+`fastify-lm` is a **Fastify plugin** that simplifies integration with multiple **language model (LM) providers**, such as:
 
-It provides a **unified interface**, allowing you to switch providers without modifying your application code.  
+| Provider   | Description                                 | Chat | Models | Tools |
+|------------|---------------------------------------------|:----:|:------:|:-----:|
+| **OpenAI**   | GPT models, including GPT-4o, GPT-3.5        |  ✅  |   ✅   |  ✅  |
+| **Google**   | Gemini models, such as Gemini 1.5           |  ✅  |   ✅   |  ❌  |
+| **Claude**   | Anthropic’s Claude models (Claude 3, etc.)  |  ✅  |   ✅   |  ✅ |
+| **Deepseek** | Deepseek AI language models                 |  ✅  |   ✅   |  ✅ |
+| **Llama**    | Llama AI language models                    |  ✅  |   ✅   |  ❌  |
+| **Mistral**  | Mistral AI language models                  |  ✅  |   ✅   |  ✅ |
+| **Test**     | Test provider, always returns "test" and the input parameters. |  ✅  |   ✅   |  ✅  |
 
-### 🔥 **Why use fastify-lm?**  
-Developing applications that interact with language models usually requires direct API integration, which can lead to:  
-- 🔗 **Dependency on a single provider**  
-- 🔄 **Difficulty switching models without refactoring code**  
-- ❌ **Inconsistencies in how different APIs are used**  
+It provides a **unified interface**, allowing you to switch providers without modifying your application code.
 
-With `fastify-lm`, you can:  
-✅ Define multiple providers in a single configuration  
-✅ Switch models just by changing environment variables  
-✅ Use a **consistent query system** without worrying about API differences  
-✅ Easily run A/B tests with different models to find the best fit for your use case  
+### 🔥 **Why use fastify-lm?**
 
-### 🛠 **Use Cases**  
-- **Chatbots and virtual assistants**: Seamlessly integrate multiple AI models to enhance user experience.  
-- **Natural Language Processing (NLP)**: Analyze text using different models without modifying your code.  
-- **Model comparison**: Evaluate different LMs within the same application with minimal changes.  
-- **Flexible infrastructure**: Switch providers based on availability, cost, or technological improvements.
-- **Analyze requests**: Moderate or analyze requests using language models.
+Developing applications that interact with language models usually requires direct API integration, which can lead to:
 
-🚀 **Ready to get started?** Continue with the installation guide and start using `fastify-lm` in just a few minutes.  
+* 🔗 **Dependency on a single provider**
+* 🔄 **Difficulty switching models without refactoring code**
+* ❌ **Inconsistencies in how different APIs are used**
+
+With `fastify-lm`, you can:\
+✅ Define multiple providers in a single configuration\
+✅ Switch models just by changing environment variables\
+✅ Use a **consistent query system** without worrying about API differences\
+✅ Easily run A/B tests with different models to find the best fit for your use case
+
+### 🛠 **Use Cases**
+
+* **Chatbots and virtual assistants**: Seamlessly integrate multiple AI models to enhance user experience.
+* **Natural Language Processing (NLP)**: Analyze text using different models without modifying your code.
+* **Model comparison**: Evaluate different LMs within the same application with minimal changes.
+* **Flexible infrastructure**: Switch providers based on availability, cost, or technological improvements.
+* **Analyze requests**: Moderate or analyze requests using language models.
+
+🚀 **Ready to get started?** Continue with the installation guide and start using `fastify-lm` in just a few minutes.
 
 ## Installation
 
@@ -81,15 +86,22 @@ fastify.register(LmPlugin, {
       name: "lm", // the name of the model instance on your app
       provider: "openai", // openai, google, claude, deepseek or any available provider
       model: "gpt-4o-mini",
-      apiKey: "your-api-key",
+      apiKey: "your-api-key", // ⚠️ Replace this with your real provider API key
     },
   ],
 });
 
-// Declare a route / that returns the models
-fastify.get("/", async function handler(request, reply) {
+// Route to get available models
+fastify.get("/models", async function handler(request, reply) {
   const models = await fastify.lm.models();
   return { models };
+});
+
+// Route to query the model (chat)
+fastify.post("/chat", async function handler(request, reply) {
+  const { messages } = request.body;
+  const response = await fastify.lm.chat({ messages });
+  return { response };
 });
 
 // Run the server!
@@ -146,7 +158,7 @@ const response = await app.lm.chat({
 });
 ```
 
-💡 _Change the environment variables to switch the provider._
+💡 *Change the environment variables to switch the provider.*
 
 #### Multiple Providers with Query Parameter Selection
 
@@ -247,51 +259,91 @@ interface QueryParams {
 
 Beyond simple model queries, you can leverage `fastify-lm` for more advanced functionalities:
 
+### 🛠️ Tool-Calling (New in v2.0.0)
+
+Enable your AI agents to interact with external systems and perform actions by calling predefined functions.
+
+- **Schedule meetings** automatically
+- **Query databases** and APIs
+- **Process files** and documents
+- **Execute business logic** dynamically
+
+[📖 Read the Tool-Calling Guide →](docs/tool-calling-guide.md)
+
 ### 🤖 Automated Customer Support Responses
-Use AI to generate instant answers for common support queries.  
+
+Use AI to generate instant answers for common support queries.\
 [📖 Read the full guide →](docs/support-bot.md)
 
 ### 🎫 AI-Powered Support Ticket Prioritization
-Automatically classify and prioritize support tickets based on urgency and sentiment.  
+
+Automatically classify and prioritize support tickets based on urgency and sentiment.\
 [📖 Read the full guide →](docs/support-ticket-prioritization.md)
 
 ### 📢 AI-Driven Sentiment Analysis
-Analyze user feedback, reviews, or messages to determine sentiment trends.  
+
+Analyze user feedback, reviews, or messages to determine sentiment trends.\
 [📖 Read the full guide →](docs/sentiment-analysis.md)
 
 ### 📌 Automatic Content Moderation
-Detect and block inappropriate messages before processing them.  
+
+Detect and block inappropriate messages before processing them.\
 [📖 Read the full guide →](docs/content-moderation.md)
 
 ### 🔍 Semantic Search & Query Expansion
-Improve search relevance by understanding intent and expanding queries intelligently.  
+
+Improve search relevance by understanding intent and expanding queries intelligently.\
 [📖 Read the full guide →](docs/semantic-search.md)
 
 ### ✨ Smart Autocomplete for Forms
-Enhance user input by automatically generating text suggestions.  
+
+Enhance user input by automatically generating text suggestions.\
 [📖 Read the full guide →](docs/autocomplete.md)
 
 ### 📄 Automatic Text Summarization
-Summarize long text passages using AI models.  
+
+Summarize long text passages using AI models.\
 [📖 Read the full guide →](docs/summarizer.md)
 
 ### 🌍 Real-Time Text Translation
-Translate user input dynamically with multi-provider support.  
+
+Translate user input dynamically with multi-provider support.\
 [📖 Read the full guide →](docs/translator.md)
 
 ### 📊 AI-Powered Data Extraction
-Extract structured information from unstructured text, such as invoices, legal documents, or reports.  
+
+Extract structured information from unstructured text, such as invoices, legal documents, or reports.\
 [📖 Read the full guide →](docs/data-extraction.md)
 
+### 📅 Automated Meeting Scheduling with Tool-Calling
+
+Let your AI agent schedule meetings directly in your users' calendars by leveraging tool-calling.\
+[📖 Read the full guide →](docs/meeting-scheduler.md)
+
 🚀 **Check out more examples in the [`/docs/`](docs/) folder!**
-
-
 
 ## Contributing
 
 We need a lot of hands to implement other providers you can help us by submitting a pull request.
 
 [📖 Adding a New Adapter](docs/adding-new-adapter.md)
+
+## Validation & Testing
+
+To validate tool-calling functionality works correctly:
+
+```bash
+# Run integration tests
+npm run test:integration
+
+# Run demo with test adapter
+npm run demo
+
+# Run demo with real API key
+OPENAI_API_KEY=your-key npm run demo
+```
+
+See [VALIDATION.md](VALIDATION.md) for complete validation guide.
 
 ## License
 

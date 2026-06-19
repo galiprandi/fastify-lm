@@ -92,4 +92,77 @@ describe('TestAdapter', () => {
       consoleErrorSpy.mockRestore()
     })
   })
+
+  describe('TestAdapter tool-calling support', () => {
+    const dummyTools = {
+      echo: {
+        description: 'Echoes input',
+        parameters: {
+          type: 'object',
+          properties: { input: { type: 'string' } },
+          required: ['input'],
+          additionalProperties: false,
+        },
+        execute: vi.fn(async (args: { input: string }) => `echo: ${args.input}`),
+      },
+      sum: {
+        description: 'Sums two numbers',
+        parameters: {
+          type: 'object',
+          properties: { a: { type: 'number' }, b: { type: 'number' } },
+          required: ['a', 'b'],
+          additionalProperties: false,
+        },
+        execute: vi.fn(async (args: { a: number; b: number }) => args.a + args.b),
+      },
+    }
+
+    it('should execute a single tool and return its result', async () => {
+      //@ts-expect-error wrong type
+      const adapterWithTools = new TestAdapter('key', 'model', dummyTools)
+      const params = {
+        messages: [{ role: 'user', content: 'test' }],
+        tools: { echo: dummyTools.echo },
+      }
+      const result = await adapterWithTools.chat(params as any)
+      expect(result).toContain('test-tools:')
+      expect(dummyTools.echo.execute).toHaveBeenCalled()
+    })
+
+    it('should execute multiple tools and return their results', async () => {
+      //@ts-expect-error wrong type
+      const adapterWithTools = new TestAdapter('key', 'model', dummyTools)
+      const params = {
+        messages: [{ role: 'user', content: 'test' }],
+        tools: dummyTools,
+      }
+      const result = await adapterWithTools.chat(params as any)
+      expect(result).toContain('test-tools:')
+      expect(dummyTools.echo.execute).toHaveBeenCalled()
+      expect(dummyTools.sum.execute).toHaveBeenCalled()
+    })
+
+    it('should handle tool execute errors gracefully', async () => {
+      const errorTool = {
+        description: 'Fails',
+        parameters: {
+          type: 'object',
+          properties: {},
+          required: [],
+          additionalProperties: false,
+        },
+        execute: vi.fn(async () => {
+          throw new Error('fail')
+        }),
+      }
+      //@ts-expect-error wrong type
+      const adapterWithTools = new TestAdapter('key', 'model', { errorTool })
+      const params = {
+        messages: [{ role: 'user', content: 'fail' }],
+        tools: { errorTool },
+      }
+      const result = await adapterWithTools.chat(params as any)
+      expect(result).toBeNull()
+    })
+  })
 })

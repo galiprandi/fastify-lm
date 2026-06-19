@@ -9,6 +9,8 @@ export namespace LM {
     openai?: {
       organization?: string // OpenAI organization ID
       baseURL?: string // Custom API endpoint
+      maxToolIterations?: number // Max tool-call iterations for tools
+      toolTimeout?: number // Timeout in milliseconds for tool execution
     }
     google?: {
       projectId?: string // Google Cloud project ID
@@ -17,37 +19,57 @@ export namespace LM {
     claude?: {
       baseURL?: string // Custom API endpoint
       version?: string // Claude API version
+      toolTimeout?: number // Timeout in milliseconds for tool execution
     }
     deepseek?: {
       baseURL?: string // Custom API endpoint
+      toolTimeout?: number // Timeout in milliseconds for tool execution
     }
     llama?: {
       baseURL?: string // Custom API endpoint
     }
     mistral?: {
       baseURL?: string // Custom API endpoint
+      toolTimeout?: number // Timeout in milliseconds for tool execution
     }
     test?: Record<string, unknown> // For test adapter configuration
   }
 
   // Message roles for chat interfaces
-  export type MessageRole = 'system' | 'user' | 'assistant'
+  export type MessageRole = 'system' | 'user' | 'assistant' | 'tool'
 
   // Interface for chat messages
   export interface ChatMessage {
     role: MessageRole
-    content: string
+    content?: string
+    name?: string
+    tool_call_id?: string
+    tool_calls?: unknown // OpenAI tool-calling payloads
   }
 
   // Parameters for the chat method
   export interface ChatParams {
     system?: string // System prompt to set context
     messages: ChatMessage[] // Chat history
-    temperature?: number // Controls randomness (0.0-1.0)
-    maxTokens?: number // Maximum tokens in response
-    topP?: number // Nucleus sampling parameter
-    frequencyPenalty?: number // Penalizes repeated tokens
-    presencePenalty?: number // Penalizes new tokens based on presence in prompt
+    tools?: Tools // Tools to be used by the LLM
+  }
+
+  // Represents a callable Tool for LLMs.
+  export interface Tool<TArgs = Record<string, unknown>, TResult = unknown> {
+    description?: string
+    parameters: {
+      type: 'object'
+      properties: Record<string, unknown>
+      required: string[]
+      additionalProperties: boolean
+      [key: string]: unknown // allow for JSON Schema extensions
+    }
+    execute: (args: TArgs) => Promise<TResult>
+  }
+
+  // A collection of tools, indexed by tool name.
+  export interface Tools {
+    [toolName: string]: Tool<any, any>
   }
 
   // Base interface for LM adapters

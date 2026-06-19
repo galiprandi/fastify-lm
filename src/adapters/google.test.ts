@@ -58,6 +58,11 @@ describe('GoogleGeminiAdapter', () => {
             },
           ],
         },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
       )
       expect(response).toBe('Hello! How can I help you today?')
     })
@@ -102,6 +107,11 @@ describe('GoogleGeminiAdapter', () => {
       expect(mockAxios.get).toHaveBeenCalledTimes(1)
       expect(mockAxios.get).toHaveBeenCalledWith(
         `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
       )
       expect(models).toEqual(['gemini-pro', 'gemini-ultra'].sort())
     })

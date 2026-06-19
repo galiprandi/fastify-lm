@@ -58,10 +58,12 @@ describe('DeepSeekAdapter', () => {
             { role: 'system', content: 'You are a helpful assistant' },
             { role: 'user', content: 'Hello' },
           ],
+          tools: undefined,
         },
         {
           headers: {
             Authorization: `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
           },
         },
       )
@@ -109,6 +111,7 @@ describe('DeepSeekAdapter', () => {
       expect(mockAxios.get).toHaveBeenCalledWith('https://api.deepseek.com/models', {
         headers: {
           Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
         },
       })
       expect(models).toEqual(['deepseek-chat', 'deepseek-coder'].sort())

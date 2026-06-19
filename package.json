@@ -1,6 +1,6 @@
 {
   "name": "fastify-lm",
-  "version": "1.4.4",
+  "version": "2.0.0",
   "description": "A Fastify plugin for integrating multiple Language Models (LM)",
   "homepage": "https://github.com/galiprandi/fastify-lm#readme",
   "author": {
@@ -41,10 +41,12 @@
     "lint": "eslint src/**/*.{ts,js} src/**/*.{ts,js}",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest run",
+    "test:integration": "vitest run src/integration",
     "format": "prettier --write \"src/**/*.{ts,js}\" \"*.{ts,js}\"",
     "test:dev": "vitest --watch",
     "test:coverage": "npm run test -- --coverage",
     "pretest": "echo -e \" Running tests...\"",
+    "demo": "node examples/tool-calling-demo.ts",
     "publish": "npm publish --access public"
   },
   "license": "MIT",
@@ -62,6 +64,7 @@
     "vitest": "^3.0.9"
   },
   "dependencies": {
+    "ajv": "^8.17.1",
     "axios": "^1.8.3",
     "fastify": "^5.2.1"
   }
